@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳机场T3航站楼"第十五届全国运动会"主题绿植景观项目服务承诺书</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.1/dist/chart.min.js"></script>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 15mm;
+            box-sizing: border-box;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+        }
+        .section {
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        .timeline {
+            position: relative;
+            padding: 20px 0;
+        }
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 15px;
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 17px;
+            width: 2px;
+            height: calc(100% + 15px);
+            background-color: #4CAF50;
+        }
+        .timeline-item:last-child::after {
+            display: none;
+        }
+        .service-process {
+            display: flex;
+            justify-content: space-between;
+            margin: 30px 0;
+        }
+        .process-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+        }
+        .process-step::after {
+            content: '';
+            position: absolute;
+            top: 30px;
+            right: -15px;
+            width: 30px;
+            height: 2px;
+            background-color: #4CAF50;
+        }
+        .process-step:last-child::after {
+            display: none;
+        }
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            background-color: #4CAF50;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: 0 auto 15px;
+        }
+        .response-time-bar {
+            height: 40px;
+            margin: 10px 0;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding-left: 10px;
+            color: white;
+            font-weight: bold;
+        }
+        .icon-card {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 4px;
+            background-color: #f8f9fa;
+        }
+        .icon-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .icon-circle svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        h1 {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1a5276;
+        }
+        h2 {
+            font-size: 20px;
+            color: #2874A6;
+            margin: 25px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #3498DB;
+        }
+        h3 {
+            font-size: 18px;
+            color: #2E86C1;
+            margin: 20px 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <header class="mb-8">
+        <h1 class="text-3xl font-bold text-center mb-4">深圳机场T3航站楼"第十五届全国运动会"主题绿植景观项目</h1>
+        <h1 class="text-3xl font-bold text-center">服务承诺书</h1>
+        <p class="text-center mt-4">深圳市汉沙杨景观规划设计有限公司</p>
+    </header>
+
+    <div class="section">
+        <p class="font-medium">我方 深圳市汉沙杨景观规划设计有限公司 如获选为深圳机场T3航站楼"第十五届全国运动会"主题绿植景观项目服务商，郑重承诺如下：</p>
+    </div>
+
+    <h2>一、服务承诺</h2>
+    
+    <!-- 服务范围 -->
+    <div class="section">
+        <h3>1. 服务范围</h3>
+        <p>严格覆盖招标文件规定的全部区域：</p>
+        <div class="chart-container">
+            <canvas id="serviceAreaChart"></canvas>
+        </div>
+        <ul class="list-disc pl-5 mt-4">
+            <li>四层出发大厅（主题绿植景观≥240㎡）</li>
+            <li>二层国内到达口（主题绿植景观≥60㎡）</li>
+            <li>二层西侧航延停车场平台（岭南特色花箱≥20个）</li>
+        </ul>
+    </div>
+
+    <!-- 服务期限 -->
+    <div class="section">
+        <h3>2. 服务期限</h3>
+        <div class="chart-container" style="height: 200px;">
+            <canvas id="timelineChart"></canvas>
+        </div>
+        <div class="timeline mt-4">
+            <div class="timeline-item">
+                <p><strong>设计、制作与布展：</strong>中标后30日历日内完成并通过验收。</p>
+            </div>
+            <div class="timeline-item">
+                <p><strong>养护期：</strong>自验收合格之日起至2026年1月31日，不间断服务。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 服务内容 -->
+    <div class="section">
+        <h3>3. 服务内容</h3>
+        
+        <div class="service-process">
+            <div class="process-step">
+                <div class="step-circle">1</div>
+                <h4 class="font-bold">设计阶段</h4>
+            </div>
+            <div class="process-step">
+                <div class="step-circle">2</div>
+                <h4 class="font-bold">施工阶段</h4>
+            </div>
+            <div class="process-step">
+                <div class="step-circle">3</div>
+                <h4 class="font-bold">养护阶段</h4>
+            </div>
+        </div>
+        
+        <div class="mt-6">
+            <h4 class="font-bold text-green-700">设计阶段：</h4>
+            <ul class="list-disc pl-5 mt-2">
+                <li>提供原创设计方案，融合"绿色、低碳、智慧"主题，经甲方确认后实施。</li>
+                <li>所有设计成果知识产权归甲方所有，未经许可不得外泄或复用。</li>
+            </ul>
+        </div>
+        
+        <div class="mt-4">
+            <h4 class="font-bold text-green-700">施工阶段：</h4>
+            <ul class="list-disc pl-5 mt-2">
+                <li>使用环保材料（如亚克力、不锈钢、可降解花器），材料样板需甲方签字确认后生产。</li>
+                <li>严格遵循机场安全管理规定，夜间施工避免客流高峰。</li>
+            </ul>
+        </div>
+        
+        <div class="mt-4">
+            <h4 class="font-bold text-green-700">养护阶段：</h4>
+            <ul class="list-disc pl-5 mt-2">
+                <li>专人巡检，定期更换枯萎花卉（24小时内完成应急更换）。</li>
+                <li>每月提交养护日志及影像记录，确保景观与合同方案一致。</li>
+            </ul>
+        </div>
+        
+        <div class="chart-container mt-6">
+            <canvas id="serviceContentChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 服务响应时间 -->
+    <div class="section">
+        <h3>4. 服务响应时间</h3>
+        
+        <div class="mb-4">
+            <p class="font-bold">设计沟通：</p>
+            <div class="response-time-bar">
+                <div class="bar-fill bg-blue-500" style="width: 48%;">48小时内</div>
+            </div>
+            <p class="text-sm">甲方提出修改意见后，48小时内提交优化方案。</p>
+        </div>
+        
+        <div class="mb-4">
+            <p class="font-bold">问题处理：</p>
+            <div class="response-time-bar">
+                <div class="bar-fill bg-green-500" style="width: 8%;">8小时内</div>
+            </div>
+            <p class="text-sm">养护期内接到甲方通知后，4小时内到场，8小时内解决问题。</p>
+        </div>
+        
+        <div class="mb-4">
+            <p class="font-bold">紧急事件：</p>
+            <div class="response-time-bar">
+                <div class="bar-fill bg-red-500" style="width: 2%;">2小时内</div>
+            </div>
+            <p class="text-sm">紧急事件（如植物倾倒、设备故障）：2小时内响应并临时围挡。</p>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="responseTimeChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 质量保障 -->
+    <div class="section">
+        <h3>5. 质量保障</h3>
+        
+        <div class="chart-container">
+            <canvas id="qualityChart"></canvas>
+        </div>
+        
+        <ul class="list-disc pl-5 mt-4">
+            <li>所有绿植存活率≥95%，枯萎植物免费更换。</li>
+            <li>质保期7日内无条件整改验收未达标项。</li>
+        </ul>
+    </div>
+
+    <h2>二、其它服务承诺</h2>
+    
+    <!-- 环保与安全 -->
+    <div class="section">
+        <h3>1. 环保与安全</h3>
+        
+        <div class="icon-card">
+            <div class="icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z" fill="white"/>
+                </svg>
+            </div>
+            <div>
+                <h4 class="font-bold">废弃植物处理</h4>
+                <p>废弃植物统一回收处理，杜绝焚烧或随意丢弃。</p>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="environmentChart"></canvas>
+        </div>
+    </div>
+
+    <!-- 人员保障 -->
+    <div class="section">
+        <h3>2. 人员保障</h3>
+        
+        <div class="icon-card">
+            <div class="icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" fill="white"/>
+                </svg>
+            </div>
+            <div>
+                <h4 class="font-bold">专业团队</h4>
+                <p>派驻团队持园艺师资格证及机场安全培训认证。</p>
+            </div>
+        </div>
+        
+        <div class="icon-card">
+            <div class="icon-circle">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M20 15.5c-1.25 0-2.45-.2-3.57-.57-.35-.11-.74-.03-1.02.24l-2.2 2.2c-2.83-1.44-5.15-3.75-6.59-6.58l2.2-2.21c.28-.27.36-.66.25-1.01C8.7 6.45 8.5 5.25 8.5 4c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1 0 9.39 7.61 17 17 17 .55 0 1-.45 1-1v-3.5c0-.55-.45-1-1-1zM12 3v10l3-3h6V3h-9z" fill="white"/>
+                </svg>
+            </div>
+            <div>
+                <h4 class="font-bold">24小时待机</h4>
+                <p>项目经理24小时待机。</p>
+            </div>
+        </div>
+        
+        <div class="chart-container">
+            <canvas id="personnelChart"></canvas>
+        </div>
+    </div>
+
+    <div class="mt-10 text-center text-gray-600">
+        <p>— 服务承诺书结束 —</p>
+    </div>
+
+    <script>
+        // 服务范围图表
+        const serviceAreaCtx = document.getElementById('serviceAreaChart').getContext('2d');
+        new Chart(serviceAreaCtx, {
+            type: 'pie',
+            data: {
+                labels: ['四层出发大厅 (240㎡)', '二层国内到达口 (60㎡)', '二层西侧航延停车场平台 (20个花箱)'],
+                datasets: [{
+                    data: [240, 60, 20],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 159, 64, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '服务区域分布图',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        // 服务期限时间轴图表
+        const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+        new Chart(timelineCtx, {
+            type: 'bar',
+            data: {
+                labels: ['设计制作布展期 (30天)', '养护服务期 (至2026年1月)'],
+                datasets: [{
+                    label: '时长',
+                    data: [1, 24],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(75, 192, 192, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(75, 192, 192, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '服务期限示意图',
+                        font: {
+                            size: 16
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: '时间长度（月）'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 服务内容图表
+        const serviceContentCtx = document.getElementById('serviceContentChart').getContext('2d');
+        new Chart(serviceContentCtx, {
+            type: 'radar',
+            data: {
+                labels: ['原创设计方案', '绿色低碳智慧主题', '环保材料使用', '安全施工规范', '专人巡检维护', '定期更换花卉'],
+                datasets: [{
+                    label: '服务内容覆盖程度',
+                    data: [95, 90, 85, 100, 95, 90],
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(54, 162, 235, 1)'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '服务内容全方位覆盖图',
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        angleLines: {
+                            display: true
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // 服务响应时间图表
+        const responseTimeCtx = document.getElementById('responseTimeChart').getContext('2d');
+        new Chart(responseTimeCtx, {
+            type: 'bar',
+            data: {
+                labels: ['设计沟通', '问题处理', '紧急事件'],
+                datasets: [{
+                    label: '响应时间（小时）',
+                    data: [48, 8, 2],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '服务响应时间对比',
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: '时间（小时）'
+                        }
+                    }
+                }
+            }
+        });
+
+        // 质量保障图表
+        const qualityCtx = document.getElementById('qualityChart').getContext('2d');
+        new Chart(qualityCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['绿植存活率目标 ≥95%', '未达标率 <5%'],
+                datasets: [{
+                    data: [95, 5],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(255, 99, 132, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '绿植存活率目标',
+                        font: {
+                            size: 16
+                        }
+                    }
+                }
+            }
+        });
+
+        // 环保与安全图表
+        const environmentCtx = document.getElementById('environmentChart').getContext('2d');
+        new Chart(environmentCtx, {
+            type: 'polarArea',
+            data: {
+                labels: ['环保材料使用率', '废弃物回收处理率', '低碳施工方案', '安全施工规范'],
+                datasets: [{
+                    data: [100, 100, 90, 100],
+                    backgroundColor: [
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(153, 102, 255, 0.7)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '环保与安全指标',
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    r: {
+                        beginAtZero: true,
+                        suggestedMax: 100
+                    }
+                }
+            }
+        });
+
+        // 人员保障图表
+        const personnelCtx = document.getElementById('personnelChart').getContext('2d');
+        new Chart(personnelCtx, {
+            type: 'bar',
+            data: {
+                labels: ['项目经理在岗率', '持证园艺师配置', '安全培训完成率', '24小时待机响应'],
+                datasets: [{
+                    label: '人员保障指标',
+                    data: [100, 100, 100, 100],
+                    backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: '人员保障指标',
+                        font: {
+                            size: 16
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: '达成率（%）'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
