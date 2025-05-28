@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳机场绿植景观项目管理服务能力方案</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+        }
+        body {
+            width: 210mm;
+            margin: 0 auto;
+            padding: 20mm;
+            font-family: "SimSun", "宋体", serif;
+            color: #333;
+            line-height: 1.6;
+        }
+        h1, h2, h3, h4 {
+            font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+            color: #1a5276;
+        }
+        .chart-container {
+            position: relative;
+            height: 300px;
+            margin: 20px 0;
+        }
+        .page-section {
+            margin-bottom: 30px;
+            break-inside: avoid;
+        }
+        .border-green {
+            border-left: 4px solid #2ecc71;
+            padding-left: 15px;
+        }
+        .highlight {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .checklist li::before {
+            content: "✓";
+            color: #27ae60;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+        .shadow-card {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="bg-white shadow-md p-6 mb-8">
+        <h1 class="text-3xl font-bold text-center mb-2">深圳机场绿植景观项目管理服务能力方案</h1>
+        <div class="text-center text-gray-500 mb-6">基于绿色、低碳、智慧理念的专业服务方案</div>
+        
+        <!-- 目录 -->
+        <div class="grid grid-cols-2 gap-4 mb-8">
+            <div class="border p-4 rounded-lg bg-gray-50">
+                <h3 class="font-bold mb-2 text-green-700">目录</h3>
+                <ul class="space-y-1">
+                    <li><a href="#response" class="text-blue-600 hover:underline">一、总体响应</a></li>
+                    <li><a href="#implementation" class="text-blue-600 hover:underline">二、项目实施方案</a></li>
+                    <li class="ml-4"><a href="#management" class="text-blue-600 hover:underline">1. 项目管理架构</a></li>
+                    <li class="ml-4"><a href="#process" class="text-blue-600 hover:underline">2. 实施流程</a></li>
+                    <li class="ml-4"><a href="#control" class="text-blue-600 hover:underline">3. 关键节点控制</a></li>
+                    <li class="ml-4"><a href="#risk" class="text-blue-600 hover:underline">4. 风险控制措施</a></li>
+                    <li class="ml-4"><a href="#service" class="text-blue-600 hover:underline">5. 服务能力保障</a></li>
+                </ul>
+            </div>
+            <div class="border p-4 rounded-lg bg-blue-50">
+                <h3 class="font-bold mb-2 text-blue-700">项目概述</h3>
+                <p class="text-sm">本方案旨在为深圳机场绿植景观项目提供全面的管理服务能力，从设计到施工再到养护，确保项目符合"绿色、低碳、智慧"主题，达到甲方要求的高标准。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 一、总体响应 -->
+    <div id="response" class="page-section mb-10">
+        <h2 class="text-2xl font-bold border-b-2 border-green-500 pb-2 mb-6">一、总体响应</h2>
+        <p class="mb-4">我方完全响应招标文件的所有技术要求及商务条款，并承诺严格按照甲方要求，提供高质量的设计、施工及养护服务。具体响应如下：</p>
+        
+        <div class="chart-container mb-8">
+            <canvas id="responseRadarChart"></canvas>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="border rounded p-3 bg-green-50">
+                <h4 class="font-bold text-green-700">质量承诺</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>严格按照招标文件规定的服务范围、技术标准、养护期限执行</li>
+                    <li>确保项目按时、按质、按量完成</li>
+                    <li>所有绿植景观存活率≥95%</li>
+                </ul>
+            </div>
+            <div class="border rounded p-3 bg-blue-50">
+                <h4 class="font-bold text-blue-700">安全与合规</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>严格遵守深圳机场安全管理规定</li>
+                    <li>施工期间采取封闭式管理，确保零安全事故</li>
+                    <li>设计方案及施工成果归甲方所有</li>
+                </ul>
+            </div>
+            <div class="border rounded p-3 bg-yellow-50">
+                <h4 class="font-bold text-yellow-700">设计原则</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>所有设计方案、材料选用、施工工艺经甲方书面确认后实施</li>
+                    <li>确保符合"绿色、低碳、智慧"主题</li>
+                </ul>
+            </div>
+            <div class="border rounded p-3 bg-purple-50">
+                <h4 class="font-bold text-purple-700">环保措施</h4>
+                <ul class="list-disc pl-5 space-y-1">
+                    <li>采用可回收材料（如不锈钢、亚克力、环保树脂）</li>
+                    <li>废弃植物统一回收处理，符合低碳要求</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 二、项目实施方案 -->
+    <div id="implementation" class="page-section mb-8">
+        <h2 class="text-2xl font-bold border-b-2 border-green-500 pb-2 mb-6">二、项目实施方案</h2>
+        
+        <!-- 1. 项目管理架构 -->
+        <div id="management" class="mb-10">
+            <h3 class="text-xl font-bold border-l-4 border-green-500 pl-3 mb-4">1. 项目管理架构</h3>
+            <p class="mb-4">为确保项目高效执行，我方组建专业团队，职责分工如下：</p>
+            
+            <div class="chart-container mb-6">
+                <canvas id="orgChart" height="280"></canvas>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div class="shadow-card p-4">
+                    <h4 class="font-bold text-center text-green-700 mb-2">管理层</h4>
+                    <ul class="text-sm">
+                        <li><span class="font-semibold">项目总监：</span>总体统筹与甲方沟通</li>
+                        <li><span class="font-semibold">技术总监：</span>技术把控与质量监督</li>
+                        <li><span class="font-semibold">安全总监：</span>安全管理与风险评估</li>
+                    </ul>
+                </div>
+                <div class="shadow-card p-4">
+                    <h4 class="font-bold text-center text-blue-700 mb-2">执行层</h4>
+                    <ul class="text-sm">
+                        <li><span class="font-semibold">设计主管：</span>方案设计与优化</li>
+                        <li><span class="font-semibold">施工主管：</span>现场施工管理</li>
+                        <li><span class="font-semibold">养护主管：</span>后期维护保养</li>
+                    </ul>
+                </div>
+                <div class="shadow-card p-4">
+                    <h4 class="font-bold text-center text-purple-700 mb-2">支持层</h4>
+                    <ul class="text-sm">
+                        <li><span class="font-semibold">材料组：</span>材料采购与品控</li>
+                        <li><span class="font-semibold">绿植组：</span>植物种类选择与培育</li>
+                        <li><span class="font-semibold">后勤组：</span>运输与物流支持</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 2. 实施流程 -->
+        <div id="process" class="mb-10">
+            <h3 class="text-xl font-bold border-l-4 border-green-500 pl-3 mb-4">2. 实施流程</h3>
+            
+            <div class="chart-container mb-8">
+                <canvas id="processFlowChart"></canvas>
+            </div>
+            
+            <div class="grid grid-cols-1 gap-4 mb-6">
+                <div class="border p-4 rounded-lg bg-blue-50">
+                    <h4 class="font-bold text-blue-700 mb-2">（1）设计阶段（中标后5日内完成）</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>提交概念方案（含效果图、材料清单），经甲方确认后深化施工图</li>
+                        <li>关键节点：方案汇报→甲方确认→最终图纸锁定</li>
+                    </ul>
+                </div>
+                
+                <div class="border p-4 rounded-lg bg-green-50">
+                    <h4 class="font-bold text-green-700 mb-2">（2）制作与布展阶段（20日历日）</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>工厂预制：模块化结构，确保精度与效率</li>
+                        <li>现场安装：合理安排时间，减少对机场运营影响</li>
+                        <li>验收标准：植物鲜活度100%，结构稳固无安全隐患</li>
+                    </ul>
+                </div>
+                
+                <div class="border p-4 rounded-lg bg-yellow-50">
+                    <h4 class="font-bold text-yellow-700 mb-2">（3）养护阶段（至2026年1月31日）</h4>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>日常养护：每周2次巡检，记录植物健康状况</li>
+                        <li>应急响应：枯萎植物24小时内更换，破损美陈48小时内修复</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 3. 关键节点控制 -->
+        <div id="control" class="mb-10">
+            <h3 class="text-xl font-bold border-l-4 border-green-500 pl-3 mb-4">3. 关键节点控制</h3>
+            
+            <div class="chart-container mb-6">
+                <canvas id="ganttChart"></canvas>
+            </div>
+            
+            <div class="border rounded p-4 bg-gray-50 mb-6">
+                <h4 class="font-bold text-center mb-2">关键节点控制策略</h4>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h5 class="font-semibold text-blue-700">时间节点控制</h5>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>合同签订后1日内组建项目团队</li>
+                            <li>3日内完成初步方案设计</li>
+                            <li>5日内完成方案确认和深化设计</li>
+                            <li>10日内完成材料采购和工厂预制</li>
+                            <li>20日内完成现场安装</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-green-700">质量节点控制</h5>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>设计阶段：甲方确认后方可进入下一阶段</li>
+                            <li>材料采购：样品测试合格后批量采购</li>
+                            <li>工厂预制：样品验收合格后批量生产</li>
+                            <li>现场安装：分区验收，先行区域验收合格后推广</li>
+                            <li>整体验收：符合设计方案及安全标准</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 4. 风险控制措施 -->
+        <div id="risk" class="mb-10">
+            <h3 class="text-xl font-bold border-l-4 border-green-500 pl-3 mb-4">4. 风险控制措施</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="chart-container">
+                    <canvas id="riskMatrix"></canvas>
+                </div>
+                <div class="border p-4 rounded-lg">
+                    <h4 class="font-bold mb-3 text-red-700">风险应对策略</h4>
+                    <ul class="space-y-3">
+                        <li class="p-2 bg-red-50 rounded">
+                            <span class="font-semibold">进度风险：</span>
+                            预留10%缓冲时间应对可能发生的审批延误
+                        </li>
+                        <li class="p-2 bg-yellow-50 rounded">
+                            <span class="font-semibold">质量风险：</span>
+                            施工前进行工艺交底，建立质量检查点
+                        </li>
+                        <li class="p-2 bg-blue-50 rounded">
+                            <span class="font-semibold">安全风险：</span>
+                            施工区域设置围挡，专人全程监督，每日安全检查
+                        </li>
+                        <li class="p-2 bg-green-50 rounded">
+                            <span class="font-semibold">运营风险：</span>
+                            夜间或低峰期施工，降低对机场运营影响
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border p-4 rounded-lg bg-gray-50">
+                <h4 class="font-bold mb-2 text-center">风险应急响应机制</h4>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="border-r pr-4">
+                        <h5 class="font-semibold text-blue-700 mb-1">发现阶段</h5>
+                        <p class="text-sm">建立全员风险识别机制，及时上报潜在风险</p>
+                    </div>
+                    <div class="border-r pr-4">
+                        <h5 class="font-semibold text-yellow-700 mb-1">评估阶段</h5>
+                        <p class="text-sm">风险等级评估，确定处理优先级和资源投入</p>
+                    </div>
+                    <div>
+                        <h5 class="font-semibold text-green-700 mb-1">处置阶段</h5>
+                        <p class="text-sm">启动应急预案，专人负责跟踪处理直至解决</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 5. 服务能力保障 -->
+        <div id="service" class="page-section">
+            <h3 class="text-xl font-bold border-l-4 border-green-500 pl-3 mb-4">5. 服务能力保障</h3>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div class="chart-container">
+                    <canvas id="serviceCapabilityChart"></canvas>
+                </div>
+                <div>
+                    <div class="border p-4 rounded-lg bg-green-50 mb-4">
+                        <h4 class="font-bold text-green-700 mb-2">资源保障</h4>
+                        <ul class="list-disc pl-5">
+                            <li>自有苗圃供应花卉，优先排产</li>
+                            <li>提前储备关键材料，确保供应链稳定</li>
+                            <li>多渠道供应商备选方案，防止单点故障</li>
+                        </ul>
+                    </div>
+                    <div class="border p-4 rounded-lg bg-blue-50">
+                        <h4 class="font-bold text-blue-700 mb-2">人员保障</h4>
+                        <ul class="list-disc pl-5">
+                            <li>团队具备类似项目经验，持证上岗</li>
+                            <li>设立专业养护团队，定期培训更新技能</li>
+                            <li>关键岗位人员双备份机制，确保无缝衔接</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border p-4 rounded-lg bg-gray-50 mb-8">
+                <h4 class="font-bold text-center mb-3">服务响应承诺</h4>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-center">
+                    <div class="p-3 bg-blue-100 rounded-lg">
+                        <div class="font-bold text-2xl text-blue-700">2小时</div>
+                        <div class="text-sm">紧急问题响应时间</div>
+                    </div>
+                    <div class="p-3 bg-green-100 rounded-lg">
+                        <div class="font-bold text-2xl text-green-700">24小时</div>
+                        <div class="text-sm">枯萎植物更换时间</div>
+                    </div>
+                    <div class="p-3 bg-yellow-100 rounded-lg">
+                        <div class="font-bold text-2xl text-yellow-700">48小时</div>
+                        <div class="text-sm">破损美陈修复时间</div>
+                    </div>
+                    <div class="p-3 bg-purple-100 rounded-lg">
+                        <div class="font-bold text-2xl text-purple-700">每周2次</div>
+                        <div class="text-sm">巡检频率</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="text-center text-gray-500 text-sm mt-10 pt-4 border-t">
+        <p>深圳机场绿植景观项目管理服务能力方案 &copy; 2023</p>
+    </footer>
+
+    <script>
+        // 使用Chart.js绘制图表
+        document.addEventListener('DOMContentLoaded', function() {
+            // 1. 总体响应雷达图
+            new Chart(document.getElementById('responseRadarChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['响应度', '质量保障', '安全管理', '材料环保', '技术标准', '进度控制'],
+                    datasets: [{
+                        label: '总体响应能力',
+                        data: [98, 95, 100, 90, 95, 93],
+                        backgroundColor: 'rgba(46, 204, 113, 0.2)',
+                        borderColor: 'rgba(46, 204, 113, 1)',
+                        pointBackgroundColor: 'rgba(46, 204, 113, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(46, 204, 113, 1)'
+                    }]
+                },
+                options: {
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            max: 100,
+                            min: 0
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '项目总体响应能力分析'
+                        }
+                    }
+                }
+            });
+            
+            // 2. 组织架构图（使用条形图模拟架构图）
+            new Chart(document.getElementById('orgChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['管理层', '执行层', '支持层'],
+                    datasets: [
+                        {
+                            label: '人员配置',
+                            backgroundColor: ['rgba(52, 152, 219, 0.7)', 'rgba(46, 204, 113, 0.7)', 'rgba(155, 89, 182, 0.7)'],
+                            data: [3, 6, 9]
+                        }
+                    ]
+                },
+                options: {
+                    indexAxis: 'y',
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '项目组织架构人员配置'
+                        },
+                        legend: {
+                            display: false
+                        },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            formatter: function(value, context) {
+                                const labels = [
+                                    '项目总监、技术总监、安全总监', 
+                                    '设计主管、施工主管、养护主管等', 
+                                    '材料组、绿植组、后勤组等'
+                                ];
+                                return labels[context.dataIndex];
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '人员数量'
+                            }
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+            
+            // 3. 实施流程图
+            new Chart(document.getElementById('processFlowChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['设计阶段', '制作与布展', '养护阶段'],
+                    datasets: [{
+                        label: '阶段持续时间',
+                        data: [5, 20, 730],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(241, 196, 15, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(241, 196, 15, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '天数(对数尺度)',
+                                type: 'logarithmic'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '项目实施流程时间分布'
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const labels = [
+                                        '5天内完成方案设计与确认', 
+                                        '20天内完成制作与布展', 
+                                        '长期养护至2026年1月31日'
+                                    ];
+                                    return labels[context.dataIndex];
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // 4. 甘特图（使用水平条形图模拟甘特图）
+            new Chart(document.getElementById('ganttChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['方案设计', '甲方确认', '深化设计', '材料采购', '工厂预制', '现场安装', '验收移交', '日常养护'],
+                    datasets: [{
+                        label: '开始时间',
+                        data: [0, 3, 4, 5, 7, 12, 19, 20],
+                        backgroundColor: 'rgba(0, 0, 0, 0)'
+                    }, {
+                        label: '持续时间',
+                        data: [3, 1, 1, 2, 5, 7, 1, 710],
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(231, 76, 60, 0.7)',
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(231, 76, 60, 0.7)',
+                            'rgba(52, 152, 219, 0.7)'
+                        ]
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    scales: {
+                        x: {
+                            stacked: true,
+                            title: {
+                                display: true,
+                                text: '天数（项目起始后）'
+                            },
+                            max: 30 // 只显示前30天，养护阶段太长
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '项目关键节点甘特图'
+                        },
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+            
+            // 5. 风险矩阵图
+            new Chart(document.getElementById('riskMatrix'), {
+                type: 'bubble',
+                data: {
+                    datasets: [
+                        {
+                            label: '进度风险',
+                            data: [{x: 3, y: 4, r: 15}],
+                            backgroundColor: 'rgba(231, 76, 60, 0.7)'
+                        },
+                        {
+                            label: '质量风险',
+                            data: [{x: 2, y: 3, r: 12}],
+                            backgroundColor: 'rgba(241, 196, 15, 0.7)'
+                        },
+                        {
+                            label: '安全风险',
+                            data: [{x: 1, y: 5, r: 10}],
+                            backgroundColor: 'rgba(52, 152, 219, 0.7)'
+                        },
+                        {
+                            label: '成本风险',
+                            data: [{x: 2, y: 2, r: 8}],
+                            backgroundColor: 'rgba(46, 204, 113, 0.7)'
+                        }
+                    ]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: '风险发生可能性'
+                            },
+                            min: 0,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: '风险影响程度'
+                            },
+                            min: 0,
+                            max: 5,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '项目风险矩阵分析'
+                        }
+                    }
+                }
+            });
+            
+            // 6. 服务能力保障饼图
+            new Chart(document.getElementById('serviceCapabilityChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['资源保障', '人员保障', '技术保障', '应急响应'],
+                    datasets: [{
+                        data: [30, 25, 25, 20],
+                        backgroundColor: [
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(231, 76, 60, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(231, 76, 60, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '服务能力保障体系分布'
+                        },
+                        legend: {
+                            position: 'right',
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
