@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>车架号查询工具</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(90deg, #0d47a1, #2196f3);
+            color: white;
+            text-align: center;
+            padding: 25px;
+            position: relative;
+        }
+        
+        header h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .icon {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2.5rem;
+            opacity: 0.2;
+        }
+        
+        .app-content {
+            padding: 30px;
+        }
+        
+        .input-section {
+            background: #f5f9ff;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .input-group input {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 50px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(33, 150, 243, 0.1);
+            font-size: 1.1rem;
+            color: #333;
+            transition: all 0.3s ease;
+        }
+        
+        .input-group input:focus {
+            outline: none;
+            box-shadow: 0 3px 15px rgba(33, 150, 243, 0.3);
+        }
+        
+        .input-group button {
+            padding: 14px 30px;
+            background: linear-gradient(90deg, #0d47a1, #2196f3);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .input-group button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(13, 71, 161, 0.4);
+        }
+        
+        .input-group button:active {
+            transform: translateY(0);
+        }
+        
+        .input-group button:disabled {
+            background: #b0bec5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .result-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            opacity: 0;
+            height: 0;
+            transition: all 0.5s ease;
+        }
+        
+        .result-section.active {
+            opacity: 1;
+            height: auto;
+            padding: 25px;
+        }
+        
+        .info-card {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-card:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border: none;
+        }
+        
+        .card-title {
+            font-size: 1.3rem;
+            color: #0d47a1;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card-title i {
+            margin-right: 10px;
+            background: #e3f2fd;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .info-item {
+            margin-bottom: 15px;
+        }
+        
+        .info-label {
+            font-size: 0.9rem;
+            color: #78909c;
+            margin-bottom: 5px;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #37474f;
+            padding: 10px 15px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-radius: 30px;
+            padding: 6px 15px;
+            font-size: 0.9rem;
+            margin-right: 10px;
+            margin-top: 10px;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+        }
+        
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(33, 150, 243, 0.2);
+            border-radius: 50%;
+            border-top-color: #2196f3;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            color: #78909c;
+            font-size: 0.9rem;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 600px) {
+            .input-group {
+                flex-direction: column;
+            }
+            
+            .input-group input {
+                padding: 12px 15px;
+            }
+            
+            .input-group button {
+                width: 100%;
+                padding: 12px;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <header>
+            <i class="fas fa-car icon"></i>
+            <h1>车架号查询工具</h1>
+            <p>通过VIN码查询车辆详细信息</p>
+        </header>
+        
+        <div class="app-content">
+            <div class="input-section">
+                <div class="input-group">
+                    <input 
+                        type="text" 
+                        v-model="vin" 
+                        placeholder="请输入17位车架号(VIN)" 
+                        maxlength="17"
+                        @keyup.enter="fetchVehicleInfo"
+                    >
+                    <button @click="fetchVehicleInfo" :disabled="loading">
+                        <i class="fas fa-search"></i> 查询信息
+                    </button>
+                </div>
+            </div>
+            
+            <div class="result-section" :class="{active: results || error}">
+                <template v-if="loading">
+                    <div class="loading">
+                        <div class="spinner"></div>
+                        <p>正在查询车辆信息，请稍候...</p>
+                    </div>
+                </template>
+                
+                <template v-else-if="error">
+                    <div class="error">
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        <h3>查询失败</h3>
+                        <p>{{ error }}</p>
+                        <button class="retry-btn" @click="fetchVehicleInfo">重试</button>
+                    </div>
+                </template>
+                
+                <template v-else-if="results">
+                    <div class="info-card">
+                        <h2 class="card-title"><i class="fas fa-info-circle"></i> 基本信息</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">车架号</div>
+                                <div class="info-value">{{ results.vin || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">制造商</div>
+                                <div class="info-value">{{ results.manufacturer || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">车辆品牌</div>
+                                <div class="info-value">{{ results.brand || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">车辆类型</div>
+                                <div class="info-value">{{ results.modelYear || '暂无信息' }} {{ results.model || '暂无信息' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h2 class="card-title"><i class="fas fa-cogs"></i> 车辆规格</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">发动机型号</div>
+                                <div class="info-value">{{ results.engineModel || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">排量</div>
+                                <div class="info-value">{{ results.displacement || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">变速箱类型</div>
+                                <div class="info-value">{{ results.transmission || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">燃料类型</div>
+                                <div class="info-value">{{ results.fuelType || '暂无信息' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h2 class="card-title"><i class="fas fa-car-side"></i> 车身信息</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">车型代码</div>
+                                <div class="info-value">{{ results.modelCode || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">生产年份</div>
+                                <div class="info-value">{{ results.modelYear || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">系列名称</div>
+                                <div class="info-value">{{ results.series || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">车身类型</div>
+                                <div class="info-value">{{ results.bodyType || '暂无信息' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h2 class="card-title"><i class="fas fa-info-circle"></i> 其他信息</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">生产工厂</div>
+                                <div class="info-value">{{ results.plant || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">序列号</div>
+                                <div class="info-value">{{ results.sequence || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">检验位</div>
+                                <div class="info-value">{{ results.checkDigit || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">VIN版本</div>
+                                <div class="info-value">{{ results.vinVersion || '暂无信息' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2023 车架号查询工具 | 数据来源于阿里云市场API服务</p>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                vin: 'WBAUD3107BP518510',
+                loading: false,
+                results: null,
+                error: null
+            },
+            methods: {
+                async fetchVehicleInfo() {
+                    if (!this.vin || this.vin.length !== 17) {
+                        this.error = '请输入有效的17位车架号';
+                        return;
+                    }
+                    
+                    this.loading = true;
+                    this.results = null;
+                    this.error = null;
+                    
+                    try {
+                        // 此处应为实际API调用
+                        // 由于跨域和安全性问题，实际项目中API调用应在后端进行
+                        // 这里仅模拟API响应
+                        
+                        console.log(`正在查询车架号: ${this.vin}`);
+                        
+                        // 模拟API响应时间
+                        await new Promise(resolve => setTimeout(resolve, 1500));
+                        
+                        // 模拟API响应数据
+                        this.results = {
+                            vin: this.vin,
+                            manufacturer: "宝马(宝马)",
+                            brand: "宝马",
+                            model: "3系",
+                            modelYear: "2021",
+                            engineModel: "B48B20",
+                            displacement: "2.0L",
+                            transmission: "自动",
+                            fuelType: "汽油",
+                            modelCode: "G20",
+                            series: "3系列轿车",
+                            bodyType: "轿车",
+                            plant: "德国丁格芬工厂",
+                            sequence: "518510",
+                            checkDigit: "B",
+                            vinVersion: "欧洲版"
+                        };
+                    } catch (err) {
+                        this.error = '查询失败，请检查网络连接或稍后重试';
+                        console.error('API请求失败:', err);
+                    } finally {
+                        this.loading = false;
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
