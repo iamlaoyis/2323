@@ -2,12 +2,13 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>车架号查询工具 - 新API接口</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>车架号查询工具 - 移动端优化版</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
+        /* 基础样式 */
         * {
             margin: 0;
             padding: 0;
@@ -15,10 +16,28 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        /* 响应式根字体设置 */
+        html {
+            font-size: 14px; /* 默认字体 */
+        }
+        
+        @media screen and (min-width: 320px) {
+            html { font-size: 14px; }
+        }
+        @media screen and (min-width: 375px) {
+            html { font-size: 15px; }
+        }
+        @media screen and (min-width: 414px) {
+            html { font-size: 16px; }
+        }
+        @media screen and (min-width: 768px) {
+            html { font-size: 17px; }
+        }
+        
         body {
             background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
             min-height: 100vh;
-            padding: 20px;
+            padding: 1rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -28,8 +47,8 @@
             width: 100%;
             max-width: 1000px;
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            border-radius: 1rem;
+            box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.2);
             overflow: hidden;
         }
         
@@ -37,80 +56,88 @@
             background: linear-gradient(90deg, #0d47a1, #2196f3);
             color: white;
             text-align: center;
-            padding: 25px;
+            padding: 1.5rem;
             position: relative;
         }
         
         header h1 {
-            font-size: 2.2rem;
-            margin-bottom: 10px;
+            font-size: 1.8rem;
+            margin-bottom: 0.6rem;
             font-weight: 700;
         }
         
         header p {
-            font-size: 1.1rem;
+            font-size: 1rem;
             opacity: 0.9;
         }
         
         .icon {
             position: absolute;
-            top: 20px;
-            right: 30px;
-            font-size: 2.5rem;
+            top: 1.25rem;
+            right: 1.875rem;
+            font-size: 2rem;
             opacity: 0.2;
         }
         
         .app-content {
-            padding: 30px;
+            padding: 1.5rem;
         }
         
         .input-section {
             background: #f5f9ff;
-            border-radius: 12px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-            margin-bottom: 30px;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
         }
         
         .input-group {
             display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin-bottom: 1.25rem;
+        }
+        
+        @media (min-width: 768px) {
+            .input-group {
+                flex-direction: row;
+            }
         }
         
         .input-group input {
             flex: 1;
-            padding: 14px 20px;
+            padding: 0.875rem 1.25rem;
             border: none;
-            border-radius: 50px;
+            border-radius: 3.125rem;
             background: white;
-            box-shadow: 0 3px 10px rgba(33, 150, 243, 0.1);
-            font-size: 1.1rem;
+            box-shadow: 0 0.1875rem 0.625rem rgba(33, 150, 243, 0.1);
+            font-size: 1rem;
             color: #333;
             transition: all 0.3s ease;
         }
         
         .input-group input:focus {
             outline: none;
-            box-shadow: 0 3px 15px rgba(33, 150, 243, 0.3);
+            box-shadow: 0 0.1875rem 0.9375rem rgba(33, 150, 243, 0.3);
         }
         
         .input-group button {
-            padding: 14px 30px;
+            padding: 0.875rem 1.875rem;
             background: linear-gradient(90deg, #0d47a1, #2196f3);
             color: white;
             border: none;
-            border-radius: 50px;
+            border-radius: 3.125rem;
             cursor: pointer;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
-            box-shadow: 0 4px 15px rgba(13, 71, 161, 0.3);
+            box-shadow: 0 0.25rem 0.9375rem rgba(13, 71, 161, 0.3);
             transition: all 0.3s ease;
+            min-width: 8rem;
         }
         
         .input-group button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 18px rgba(13, 71, 161, 0.4);
+            transform: translateY(-0.125rem);
+            box-shadow: 0 0.375rem 1.125rem rgba(13, 71, 161, 0.4);
         }
         
         .input-group button:active {
@@ -126,8 +153,8 @@
         
         .result-section {
             background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 0.75rem;
+            box-shadow: 0 0.25rem 0.9375rem rgba(0, 0, 0, 0.05);
             overflow: hidden;
             opacity: 0;
             height: 0;
@@ -137,12 +164,12 @@
         .result-section.active {
             opacity: 1;
             height: auto;
-            padding: 25px;
+            padding: 1.5rem;
         }
         
         .info-card {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
             border-bottom: 1px solid #eee;
         }
         
@@ -153,62 +180,76 @@
         }
         
         .card-title {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             color: #0d47a1;
-            margin-bottom: 15px;
+            margin-bottom: 0.9rem;
             display: flex;
             align-items: center;
         }
         
         .card-title i {
-            margin-right: 10px;
+            margin-right: 0.6rem;
             background: #e3f2fd;
-            width: 38px;
-            height: 38px;
+            width: 2.2rem;
+            height: 2.2rem;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1rem;
         }
         
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
+            grid-template-columns: 1fr;
+            gap: 1rem;
+        }
+        
+        @media (min-width: 480px) {
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (min-width: 768px) {
+            .info-grid {
+                grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+            }
         }
         
         .info-item {
-            margin-bottom: 15px;
+            margin-bottom: 0.9rem;
         }
         
         .info-label {
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: #78909c;
-            margin-bottom: 5px;
+            margin-bottom: 0.3rem;
         }
         
         .info-value {
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 500;
             color: #37474f;
-            padding: 10px 15px;
+            padding: 0.6rem 0.9rem;
             background: #f9f9f9;
-            border-radius: 8px;
-            border-left: 4px solid #2196f3;
+            border-radius: 0.5rem;
+            border-left: 0.25rem solid #2196f3;
+            word-break: break-word;
         }
         
         .raw-data-toggle {
             text-align: center;
-            margin: 20px 0;
+            margin: 1.25rem 0;
         }
         
         .raw-data-toggle button {
             background: #e3f2fd;
             color: #0d47a1;
             border: none;
-            border-radius: 30px;
-            padding: 10px 20px;
-            font-size: 1rem;
+            border-radius: 1.875rem;
+            padding: 0.6rem 1.25rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.3s;
         }
@@ -220,13 +261,14 @@
         .raw-data-container {
             background: #2c3e50;
             color: #ecf0f1;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            max-height: 400px;
+            border-radius: 0.5rem;
+            padding: 1.25rem;
+            margin-top: 1.25rem;
+            max-height: 25rem;
             overflow: auto;
             font-family: monospace;
             display: none;
+            font-size: 0.85rem;
         }
         
         .raw-data-container.active {
@@ -242,17 +284,17 @@
         
         .loading {
             text-align: center;
-            padding: 30px;
+            padding: 1.875rem;
         }
         
         .spinner {
-            width: 60px;
-            height: 60px;
-            border: 5px solid rgba(33, 150, 243, 0.2);
+            width: 3.75rem;
+            height: 3.75rem;
+            border: 0.3125rem solid rgba(33, 150, 243, 0.2);
             border-radius: 50%;
             border-top-color: #2196f3;
             animation: spin 1s linear infinite;
-            margin: 0 auto 20px;
+            margin: 0 auto 1.25rem;
         }
         
         @keyframes spin {
@@ -262,68 +304,74 @@
         .error {
             background: #ffebee;
             color: #c62828;
-            padding: 20px;
-            border-radius: 12px;
+            padding: 1.25rem;
+            border-radius: 0.75rem;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 1.25rem;
         }
         
         .api-info {
             background: #e8f5e9;
-            border-radius: 8px;
-            padding: 15px;
-            margin-top: 20px;
-            font-size: 0.9rem;
+            border-radius: 0.5rem;
+            padding: 0.9rem;
+            margin-top: 1.25rem;
+            font-size: 0.85rem;
         }
         
         .api-info h3 {
             color: #2e7d32;
-            margin-bottom: 10px;
+            margin-bottom: 0.6rem;
+            font-size: 1rem;
         }
         
         .api-info p {
-            margin-bottom: 8px;
+            margin-bottom: 0.5rem;
             line-height: 1.5;
         }
         
         footer {
             text-align: center;
-            padding: 20px;
+            padding: 1.25rem;
             color: #78909c;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             border-top: 1px solid #eee;
         }
         
         .vehicle-image {
             width: 100%;
-            max-height: 200px;
+            max-height: 12.5rem;
             object-fit: contain;
-            border-radius: 8px;
-            margin-top: 15px;
+            border-radius: 0.5rem;
+            margin-top: 0.9rem;
             background: #f8f9fa;
-            padding: 10px;
+            padding: 0.6rem;
         }
         
-        @media (max-width: 768px) {
-            .input-group {
-                flex-direction: column;
-            }
-            
-            .input-group input {
-                padding: 12px 15px;
-            }
-            
-            .input-group button {
-                width: 100%;
-                padding: 12px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
+        /* 移动端特定优化 */
+        @media (max-width: 480px) {
             .container {
-                margin: 10px;
+                border-radius: 0.8rem;
+            }
+            
+            header {
+                padding: 1.2rem;
+            }
+            
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .app-content {
+                padding: 1rem;
+            }
+            
+            .input-section {
+                padding: 1rem;
+            }
+            
+            .info-value {
+                padding: 0.5rem 0.8rem;
+                font-size: 0.95rem;
             }
         }
     </style>
@@ -333,7 +381,7 @@
         <header>
             <i class="fas fa-car icon"></i>
             <h1>车架号查询工具</h1>
-            <p>通过VIN码查询车辆详细信息（新API接口）</p>
+            <p>通过VIN码查询车辆详细信息（移动端优化版）</p>
         </header>
         
         <div class="app-content">
@@ -351,14 +399,6 @@
                     </button>
                 </div>
                 
-                <div class="api-info">
-                    <h3><i class="fas fa-info-circle"></i> API使用说明</h3>
-                    <p>• 使用阿里云市场车架号查询API (新接口)</p>
-                    <p>• 当前AppCode: {{ maskedAppCode }}</p>
-                    <p>• 请求地址: https://kzvin.market.alicloudapi.com/vin/query</p>
-                    <p>• 车架号位置提示：前挡风玻璃左下角、B柱铭牌或行驶证上[3,5](@ref)</p>
-                </div>
-            </div>
             
             <div class="result-section" :class="{active: results || error}">
                 <template v-if="loading">
@@ -516,7 +556,7 @@
         
         <footer>
             <p>© 2023 车架号查询工具 | 数据来源于阿里云市场API服务</p>
-            <p>车架号位置提示：前挡风玻璃左下角、B柱铭牌或行驶证上[3,5](@ref)</p>
+            <p>车架号位置提示：前挡风玻璃左下角、B柱铭牌或行驶证上</p>
         </footer>
     </div>
 
