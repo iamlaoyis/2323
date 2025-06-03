@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>车架号查询工具 - 完整数据展示</title>
+    <title>车架号查询工具 - 新API接口</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -293,6 +294,16 @@
             border-top: 1px solid #eee;
         }
         
+        .vehicle-image {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-top: 15px;
+            background: #f8f9fa;
+            padding: 10px;
+        }
+        
         @media (max-width: 768px) {
             .input-group {
                 flex-direction: column;
@@ -322,7 +333,7 @@
         <header>
             <i class="fas fa-car icon"></i>
             <h1>车架号查询工具</h1>
-            <p>通过VIN码查询车辆详细信息</p>
+            <p>通过VIN码查询车辆详细信息（新API接口）</p>
         </header>
         
         <div class="app-content">
@@ -342,9 +353,10 @@
                 
                 <div class="api-info">
                     <h3><i class="fas fa-info-circle"></i> API使用说明</h3>
-                    <p>• 使用阿里云市场车架号查询API (API编号: cmapi00065864)</p>
+                    <p>• 使用阿里云市场车架号查询API (新接口)</p>
                     <p>• 当前AppCode: {{ maskedAppCode }}</p>
-                    <p>• 请求地址: https://tsvin.market.alicloudapi.com/vin/index</p>
+                    <p>• 请求地址: https://kzvin.market.alicloudapi.com/vin/query</p>
+                    <p>• 车架号位置提示：前挡风玻璃左下角、B柱铭牌或行驶证上[3,5](@ref)</p>
                 </div>
             </div>
             
@@ -366,6 +378,12 @@
                 </template>
                 
                 <template v-else-if="results">
+                    <!-- 车辆图片展示 -->
+                    <div v-if="results.img" class="info-card">
+                        <h2 class="card-title"><i class="fas fa-image"></i> 车辆图片</h2>
+                        <img :src="results.img" alt="车辆图片" class="vehicle-image">
+                    </div>
+                    
                     <!-- 格式化数据展示 -->
                     <div class="info-card">
                         <h2 class="card-title"><i class="fas fa-info-circle"></i> 基本信息</h2>
@@ -393,6 +411,14 @@
                             <div class="info-item">
                                 <div class="info-label">生产年份</div>
                                 <div class="info-value">{{ safeGet(results, 'year') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">指导价</div>
+                                <div class="info-value">{{ safeGet(results, 'price') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">市场价</div>
+                                <div class="info-value">{{ safeGet(results, 'market_price') || '暂无信息' }}</div>
                             </div>
                         </div>
                     </div>
@@ -424,6 +450,14 @@
                                 <div class="info-label">排放标准</div>
                                 <div class="info-value">{{ safeGet(results, 'effluent_standard') || '暂无信息' }}</div>
                             </div>
+                            <div class="info-item">
+                                <div class="info-label">燃油类型</div>
+                                <div class="info-value">{{ safeGet(results, 'rlxs') || '暂无信息' }} ({{ safeGet(results, 'ryxh') || '暂无信息' }})</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">供油方式</div>
+                                <div class="info-value">{{ safeGet(results, 'gyfs') || '暂无信息' }}</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -454,6 +488,14 @@
                                 <div class="info-label">整备质量</div>
                                 <div class="info-value">{{ safeGet(results, 'full_weight') || '暂无信息' }}kg</div>
                             </div>
+                            <div class="info-item">
+                                <div class="info-label">前轮胎尺寸</div>
+                                <div class="info-value">{{ safeGet(results, 'front_tyre_size') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">后轮胎尺寸</div>
+                                <div class="info-value">{{ safeGet(results, 'rear_tyre_size') || '暂无信息' }}</div>
+                            </div>
                         </div>
                     </div>
                     
@@ -474,6 +516,7 @@
         
         <footer>
             <p>© 2023 车架号查询工具 | 数据来源于阿里云市场API服务</p>
+            <p>车架号位置提示：前挡风玻璃左下角、B柱铭牌或行驶证上[3,5](@ref)</p>
         </footer>
     </div>
 
@@ -481,13 +524,13 @@
         new Vue({
             el: '#app',
             data: {
-                vin: 'WBAUD3107BP518510',
+                vin: 'LSGUA847XHE006203', // 默认VIN码（别克MPV示例）
                 loading: false,
                 results: null,
                 rawResponseData: null,
                 error: null,
                 showRawData: false,
-                appCode: '749a9e5bcb0b483aa265fb8d89a9e481'
+                appCode: '749a9e5bcb0b483aa265fb8d89a9e481' // 您提供的新AppCode
             },
             computed: {
                 maskedAppCode() {
@@ -530,19 +573,7 @@
                     }
                 },
                 
-                // 数据格式兼容处理
-                normalizeResponse(response) {
-                    // 尝试多种数据格式解析
-                    if (response.data && response.data.data) {
-                        return response.data.data;
-                    } else if (response.data && response.data.vin) {
-                        return response.data;
-                    } else if (response.data) {
-                        return response.data;
-                    }
-                    return response;
-                },
-                
+                // 新API接口调用
                 async fetchVehicleInfo() {
                     if (!this.vin || this.vin.length !== 17) {
                         this.error = '请输入有效的17位车架号';
@@ -555,87 +586,29 @@
                     this.showRawData = false;
                     
                     try {
-                                                /*
-                        // 模拟API响应数据（实际使用时应调用真实API）
-                        const mockResponse = {
-                            "code": 1,
-                            "msg": "操作成功",
-                            "data": {
-                                "vin": "WBAUD3107BP518510",
-                                "matching_mode": 1,
-                                "is_commercial": 0,
-                                "is_import": 1,
-                                "is_rules": 1,
-                                "cid": "11985",
-                                "brand_name": "宝马",
-                                "manufacturer": "宝马(进口)",
-                                "series_name": "宝马1系(进口)",
-                                "name": "2008款 120i 自动挡",
-                                "year": "2008",
-                                "img": "http://static.tanshuapi.com/car/202425/17215510499dba3d.jpg",
-                                "price": "28.80万",
-                                "market_price": "28.80万",
-                                "gearbox": "6挡手自一体",
-                                "gearnum": "6",
-                                "geartype": "手自一体变速箱(AT)",
-                                "engine_model": "N46B20CC",
-                                "driven_type": "前置后驱",
-                                "displacement_ml": "1995",
-                                "displacement": "2.0",
-                                "nedczhyh": "8.6",
-                                "effluent_standard": "欧IV",
-                                "scale": "紧凑型车",
-                                "csjg": "两厢车",
-                                "cms": "5",
-                                "zws": "5",
-                                "market_date": "",
-                                "stop_date": "",
-                                "length": "4239",
-                                "width": "1748",
-                                "high": "1421",
-                                "wheelbase": "2660",
-                                "trackfront": "1480",
-                                "trackrear": "1493",
-                                "full_weight": "1375",
-                                "full_weight_max": "",
-                                "full_weight_zz": "",
-                                "front_tyre_size": "205/55 R16",
-                                "rear_tyre_size": "205/55 R16",
-                                "rlxs": "汽油",
-                                "ryxh": "95号",
-                                "gearbox_number": "",
-                                "chassis_number": "",
-                                "zdgl": "115",
-                                "zdml": "156",
-                                "front_brake_type": "通风盘式",
-                                "rear_brake_type": "盘式",
-                                "parking_brake_type": "手刹",
-                                "qfs": "4",
-                                "gyfs": "多点电喷",
-                                "body_type": "承载式",
-                                "version": "",
-                                "model_list": [
-                                    {
-                                        "cid": "11985",
-                                        "brand_name": "宝马",
-                                        "series_name": "宝马1系(进口)",
-                                        "name": "2008款 120i 自动挡"
-                                    }
-                                ]
+                        // 使用新API接口
+                        const response = await axios.get(
+                            'https://kzvin.market.alicloudapi.com/vin/query', 
+                            {
+                                params: { vin: this.vin },
+                                headers: { 
+                                    'Authorization': `APPCODE ${this.appCode}`,
+                                    'Content-Type': 'application/json'
+                                }
                             }
-                        };
-                                                */
-                        // 实际API调用（注释状态）
-
-                        const response = await axios.get('https://tsvin.market.alicloudapi.com/vin/index', {
-                            params: { vin: this.vin },
-                            headers: { 'Authorization': `APPCODE ${this.appCode}` }
-                        });
-
+                        );
                         
-                        // 使用模拟数据
-                        this.rawResponseData = mockResponse;
-                        this.results = this.normalizeResponse({ data: mockResponse });
+                        // 保存原始响应数据
+                        this.rawResponseData = response.data;
+                        
+                        // 处理响应数据
+                        if (response.data && response.data.data) {
+                            this.results = response.data.data;
+                        } else if (response.data) {
+                            this.results = response.data;
+                        } else {
+                            this.error = '未获取到有效数据';
+                        }
                         
                     } catch (err) {
                         console.error('API请求失败:', err);
@@ -655,7 +628,15 @@
                         } else if (error.response.status === 404) {
                             return '未找到该车架号对应的车辆信息';
                         } else if (error.response.data) {
-                            return `服务器错误: ${error.response.status}`;
+                            // 尝试从错误响应中提取消息
+                            try {
+                                const errorMsg = this.safeGet(error.response.data, 'msg') || 
+                                                this.safeGet(error.response.data, 'message') || 
+                                                this.safeGet(error.response.data, 'error');
+                                return errorMsg || `服务器错误: ${error.response.status}`;
+                            } catch (e) {
+                                return `API错误: ${error.response.status}`;
+                            }
                         } else {
                             return `API请求错误: ${error.response.status}`;
                         }
