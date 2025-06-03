@@ -3,10 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>车架号查询工具</title>
+    <title>车架号查询工具 - 完整数据展示</title>
     <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios@0.21.1/dist/axios.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -26,7 +25,7 @@
         
         .container {
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 16px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
@@ -233,6 +232,13 @@
             display: block;
         }
         
+        /* JSON高亮样式 */
+        .json-key { color: #f8c555; }
+        .json-string { color: #a5e075; }
+        .json-number { color: #6a9fb5; }
+        .json-boolean { color: #d28445; }
+        .json-null { color: #aa759f; }
+        
         .loading {
             text-align: center;
             padding: 30px;
@@ -374,14 +380,19 @@
                             </div>
                             <div class="info-item">
                                 <div class="info-label">车辆品牌</div>
-                                <div class="info-value">{{ safeGet(results, 'brand') || '暂无信息' }}</div>
+                                <div class="info-value">{{ safeGet(results, 'brand_name') || '暂无信息' }}</div>
                             </div>
                             <div class="info-item">
-                                <div class="info-label">车辆类型</div>
-                                <div class="info-value">
-                                    {{ safeGet(results, 'modelYear') || '暂无信息' }} 
-                                    {{ safeGet(results, 'model') || '' }}
-                                </div>
+                                <div class="info-label">车系</div>
+                                <div class="info-value">{{ safeGet(results, 'series_name') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">车型</div>
+                                <div class="info-value">{{ safeGet(results, 'name') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">生产年份</div>
+                                <div class="info-value">{{ safeGet(results, 'year') || '暂无信息' }}</div>
                             </div>
                         </div>
                     </div>
@@ -391,19 +402,57 @@
                         <div class="info-grid">
                             <div class="info-item">
                                 <div class="info-label">发动机型号</div>
-                                <div class="info-value">{{ safeGet(results, 'engineModel') || '暂无信息' }}</div>
+                                <div class="info-value">{{ safeGet(results, 'engine_model') || '暂无信息' }}</div>
                             </div>
                             <div class="info-item">
                                 <div class="info-label">排量</div>
-                                <div class="info-value">{{ safeGet(results, 'displacement') || '暂无信息' }}</div>
+                                <div class="info-value">{{ safeGet(results, 'displacement') || '暂无信息' }}L ({{ safeGet(results, 'displacement_ml') || '暂无信息' }}ml)</div>
                             </div>
                             <div class="info-item">
                                 <div class="info-label">变速箱类型</div>
-                                <div class="info-value">{{ safeGet(results, 'transmission') || '暂无信息' }}</div>
+                                <div class="info-value">{{ safeGet(results, 'gearbox') || '暂无信息' }}</div>
                             </div>
                             <div class="info-item">
-                                <div class="info-label">燃料类型</div>
-                                <div class="info-value">{{ safeGet(results, 'fuelType') || '暂无信息' }}</div>
+                                <div class="info-label">驱动方式</div>
+                                <div class="info-value">{{ safeGet(results, 'driven_type') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">综合油耗</div>
+                                <div class="info-value">{{ safeGet(results, 'nedczhyh') || '暂无信息' }}L/100km</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">排放标准</div>
+                                <div class="info-value">{{ safeGet(results, 'effluent_standard') || '暂无信息' }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h2 class="card-title"><i class="fas fa-car-side"></i> 车身信息</h2>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <div class="info-label">车辆级别</div>
+                                <div class="info-value">{{ safeGet(results, 'scale') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">车身结构</div>
+                                <div class="info-value">{{ safeGet(results, 'csjg') || '暂无信息' }}</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">长×宽×高</div>
+                                <div class="info-value">{{ safeGet(results, 'length') || '暂无信息' }}×{{ safeGet(results, 'width') || '暂无信息' }}×{{ safeGet(results, 'high') || '暂无信息' }}mm</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">轴距</div>
+                                <div class="info-value">{{ safeGet(results, 'wheelbase') || '暂无信息' }}mm</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">前轮距/后轮距</div>
+                                <div class="info-value">{{ safeGet(results, 'trackfront') || '暂无信息' }}/{{ safeGet(results, 'trackrear') || '暂无信息' }}mm</div>
+                            </div>
+                            <div class="info-item">
+                                <div class="info-label">整备质量</div>
+                                <div class="info-value">{{ safeGet(results, 'full_weight') || '暂无信息' }}kg</div>
                             </div>
                         </div>
                     </div>
@@ -412,12 +461,12 @@
                     <div class="raw-data-toggle">
                         <button @click="showRawData = !showRawData">
                             <i class="fas fa-code"></i> 
-                            {{ showRawData ? '隐藏原始数据' : '显示原始数据' }}
+                            {{ showRawData ? '隐藏原始数据' : '显示原始JSON数据' }}
                         </button>
                     </div>
                     
                     <div class="raw-data-container" :class="{active: showRawData}">
-                        <pre>{{ formatJSON(rawResponseData) }}</pre>
+                        <pre v-html="formatJSON(rawResponseData)"></pre>
                     </div>
                 </template>
             </div>
@@ -446,16 +495,36 @@
                 }
             },
             methods: {
-                // 安全获取嵌套对象属性[1,4](@ref)
-                safeGet(obj, path, defaultValue = '') {
+                // 安全获取嵌套对象属性
+                safeGet(obj, path, defaultValue = '暂无信息') {
                     return path.split('.').reduce((o, p) => (o || {})[p] || defaultValue, obj);
                 },
                 
-                // JSON格式化显示[10,11](@ref)
+                // JSON格式化显示（带语法高亮）
                 formatJSON(data) {
                     if (!data) return '暂无原始数据';
+                    
                     try {
-                        return JSON.stringify(data, null, 2);
+                        const jsonString = JSON.stringify(data, null, 2);
+                        return jsonString
+                            .replace(/&/g, '&amp;')
+                            .replace(/</g, '&lt;')
+                            .replace(/>/g, '&gt;')
+                            .replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, match => {
+                                let cls = 'json-number';
+                                if (/^"/.test(match)) {
+                                    if (/:$/.test(match)) {
+                                        cls = 'json-key';
+                                    } else {
+                                        cls = 'json-string';
+                                    }
+                                } else if (/true|false/.test(match)) {
+                                    cls = 'json-boolean';
+                                } else if (/null/.test(match)) {
+                                    cls = 'json-null';
+                                }
+                                return `<span class="${cls}">${match}</span>`;
+                            });
                     } catch (e) {
                         return '数据格式化错误: ' + e.message;
                     }
@@ -486,48 +555,114 @@
                     this.showRawData = false;
                     
                     try {
+                                                /*
+                        // 模拟API响应数据（实际使用时应调用真实API）
+                        const mockResponse = {
+                            "code": 1,
+                            "msg": "操作成功",
+                            "data": {
+                                "vin": "WBAUD3107BP518510",
+                                "matching_mode": 1,
+                                "is_commercial": 0,
+                                "is_import": 1,
+                                "is_rules": 1,
+                                "cid": "11985",
+                                "brand_name": "宝马",
+                                "manufacturer": "宝马(进口)",
+                                "series_name": "宝马1系(进口)",
+                                "name": "2008款 120i 自动挡",
+                                "year": "2008",
+                                "img": "http://static.tanshuapi.com/car/202425/17215510499dba3d.jpg",
+                                "price": "28.80万",
+                                "market_price": "28.80万",
+                                "gearbox": "6挡手自一体",
+                                "gearnum": "6",
+                                "geartype": "手自一体变速箱(AT)",
+                                "engine_model": "N46B20CC",
+                                "driven_type": "前置后驱",
+                                "displacement_ml": "1995",
+                                "displacement": "2.0",
+                                "nedczhyh": "8.6",
+                                "effluent_standard": "欧IV",
+                                "scale": "紧凑型车",
+                                "csjg": "两厢车",
+                                "cms": "5",
+                                "zws": "5",
+                                "market_date": "",
+                                "stop_date": "",
+                                "length": "4239",
+                                "width": "1748",
+                                "high": "1421",
+                                "wheelbase": "2660",
+                                "trackfront": "1480",
+                                "trackrear": "1493",
+                                "full_weight": "1375",
+                                "full_weight_max": "",
+                                "full_weight_zz": "",
+                                "front_tyre_size": "205/55 R16",
+                                "rear_tyre_size": "205/55 R16",
+                                "rlxs": "汽油",
+                                "ryxh": "95号",
+                                "gearbox_number": "",
+                                "chassis_number": "",
+                                "zdgl": "115",
+                                "zdml": "156",
+                                "front_brake_type": "通风盘式",
+                                "rear_brake_type": "盘式",
+                                "parking_brake_type": "手刹",
+                                "qfs": "4",
+                                "gyfs": "多点电喷",
+                                "body_type": "承载式",
+                                "version": "",
+                                "model_list": [
+                                    {
+                                        "cid": "11985",
+                                        "brand_name": "宝马",
+                                        "series_name": "宝马1系(进口)",
+                                        "name": "2008款 120i 自动挡"
+                                    }
+                                ]
+                            }
+                        };
+                                                */
+                        // 实际API调用（注释状态）
+
                         const response = await axios.get('https://tsvin.market.alicloudapi.com/vin/index', {
                             params: { vin: this.vin },
                             headers: { 'Authorization': `APPCODE ${this.appCode}` }
                         });
+
                         
-                        // 保存原始响应数据
-                        this.rawResponseData = response.data;
-                        
-                        // 数据标准化处理
-                        this.results = this.normalizeResponse(response);
+                        // 使用模拟数据
+                        this.rawResponseData = mockResponse;
+                        this.results = this.normalizeResponse({ data: mockResponse });
                         
                     } catch (err) {
                         console.error('API请求失败:', err);
-                        
-                        // 增强错误处理
-                        if (err.response) {
-                            if (err.response.status === 400) {
-                                this.error = '请求参数错误，请检查车架号格式';
-                            } else if (err.response.status === 401) {
-                                this.error = 'API认证失败，请检查AppCode';
-                            } else if (err.response.status === 404) {
-                                this.error = '未找到该车架号对应的车辆信息';
-                            } else if (err.response.data) {
-                                // 尝试从错误响应中提取消息
-                                try {
-                                    const errorMsg = this.safeGet(err.response.data, 'msg') || 
-                                                    this.safeGet(err.response.data, 'message') || 
-                                                    this.safeGet(err.response.data, 'error');
-                                    this.error = errorMsg || `服务器错误: ${err.response.status}`;
-                                } catch (e) {
-                                    this.error = `API错误: ${err.response.status}`;
-                                }
-                            } else {
-                                this.error = `API请求错误: ${err.response.status}`;
-                            }
-                        } else if (err.request) {
-                            this.error = '网络请求失败，请检查网络连接';
-                        } else {
-                            this.error = '发生未知错误: ' + err.message;
-                        }
+                        this.error = this.handleError(err);
                     } finally {
                         this.loading = false;
+                    }
+                },
+                
+                // 错误处理
+                handleError(error) {
+                    if (error.response) {
+                        if (error.response.status === 400) {
+                            return '请求参数错误，请检查车架号格式';
+                        } else if (error.response.status === 401) {
+                            return 'API认证失败，请检查AppCode';
+                        } else if (error.response.status === 404) {
+                            return '未找到该车架号对应的车辆信息';
+                        } else if (error.response.data) {
+                            return `服务器错误: ${error.response.status}`;
+                        } else {
+                            return `API请求错误: ${error.response.status}`;
+                        }
+                    } else if (error.request) {
+                        return '网络请求失败，请检查网络连接';
+                    } else {
+                        return '发生未知错误: ' + error.message;
                     }
                 }
             },
