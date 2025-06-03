@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳设计公司路线规划</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #7f8c8d;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .route-info {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .route-info h2 {
+            color: #3498db;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .route-info h2 i {
+            margin-right: 10px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .info-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-card h3 i {
+            margin-right: 10px;
+            color: #3498db;
+        }
+        
+        .company-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .company-list {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .company-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .company-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #3498db 0%, #2c3e50 100%);
+            color: white;
+            padding: 20px;
+        }
+        
+        .card-header h3 {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+        
+        .card-body {
+            padding: 25px;
+        }
+        
+        .card-body p {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .card-body p i {
+            margin-right: 10px;
+            color: #3498db;
+            min-width: 20px;
+        }
+        
+        .map-container {
+            height: 300px;
+            background: #eef2f7;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+        }
+        
+        .map-placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #e0eafc 0%, #cfdef3 100%);
+            color: #2c3e50;
+        }
+        
+        .map-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #3498db;
+        }
+        
+        .transport-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .transport-btn {
+            flex: 1;
+            padding: 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .transport-btn.active {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .transport-btn:hover {
+            background: #e3f2fd;
+        }
+        
+        .route-details {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .route-details p {
+            margin-bottom: 8px;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #7f8c8d;
+            font-size: 0.9rem;
+        }
+        
+        .highlight {
+            background: #e3f2fd;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        
+        .time-badge {
+            background: #2ecc71;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-left: 10px;
+        }
+        
+        .distance-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <header>
+            <h1>深圳设计公司路线规划</h1>
+            <p class="subtitle">从西丽地铁站出发，高效访问三家设计公司的最佳路线方案</p>
+        </header>
+        
+        <main>
+            <section class="route-info">
+                <h2><i class="fas fa-map-marker-alt"></i> 起点信息</h2>
+                <div class="info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-subway"></i> 西丽地铁站</h3>
+                        <p><i class="fas fa-location-dot"></i> 地址：深圳市南山区西丽街道</p>
+                        <p><i class="fas fa-train-subway"></i> 地铁线路：5号线、7号线</p>
+                        <p><i class="fas fa-bus"></i> 公交线路：多条公交线路经过</p>
+                    </div>
+                    <div class="info-card">
+                        <h3><i class="fas fa-route"></i> 行程建议</h3>
+                        <p><i class="fas fa-clock"></i> 建议出发时间：上午8:30-9:00</p>
+                        <p><i class="fas fa-car"></i> 推荐交通方式：地铁+公交组合</p>
+                        <p><i class="fas fa-arrows-rotate"></i> 最佳访问顺序：朗程师 → 汉沙杨 → 大地景观</p>
+                    </div>
+                </div>
+            </section>
+            
+            <div class="company-list">
+                <!-- 朗程师公司卡片 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <h3>深圳市朗程师地域规划设计有限公司</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><i class="fas fa-map-pin"></i> <strong>地址：</strong>深圳市南山区科技园南区R2-A栋6楼</p>
+                        <p><i class="fas fa-phone"></i> <strong>电话：</strong>0755-26567890</p>
+                        <p><i class="fas fa-clock"></i> <strong>营业时间：</strong>周一至周五 9:00-18:00</p>
+                        
+                        <div class="transport-options">
+                            <div class="transport-btn" :class="{'active': activeTransport[0] === 'metro'}" @click="setTransport(0, 'metro')">
+                                <i class="fas fa-train-subway"></i> 地铁
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[0] === 'bus'}" @click="setTransport(0, 'bus')">
+                                <i class="fas fa-bus"></i> 公交
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[0] === 'car'}" @click="setTransport(0, 'car')">
+                                <i class="fas fa-car"></i> 驾车
+                            </div>
+                        </div>
+                        
+                        <div class="route-details">
+                            <p v-if="activeTransport[0] === 'metro'">
+                                <i class="fas fa-subway"></i> <strong>地铁方案：</strong> 
+                                从西丽站乘坐<span class="highlight">5号线(环中线)</span>往黄贝岭方向，在<span class="highlight">深圳北站</span>换乘<span class="highlight">4号线(龙华线)</span>往福田口岸方向，在<span class="highlight">市民中心站</span>下车，步行10分钟到达。
+                                <span class="time-badge">约35分钟</span>
+                            </p>
+                            <p v-if="activeTransport[0] === 'bus'">
+                                <i class="fas fa-bus"></i> <strong>公交方案：</strong> 
+                                从西丽地铁站公交站乘坐<span class="highlight">M299路</span>公交车，经过8站后在<span class="highlight">科技园站</span>下车，步行5分钟到达。
+                                <span class="time-badge">约40分钟</span>
+                            </p>
+                            <p v-if="activeTransport[0] === 'car'">
+                                <i class="fas fa-car"></i> <strong>驾车方案：</strong> 
+                                沿<span class="highlight">沙河西路</span>向南行驶，转入<span class="highlight">深南大道</span>，全程约12公里。
+                                <span class="time-badge">约30分钟</span>
+                                <span class="distance-badge">12公里</span>
+                            </p>
+                        </div>
+                        
+                        <div class="map-container">
+                            <div class="map-placeholder">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <p>朗程师公司位置地图</p>
+                                <p>深圳市南山区科技园南区R2-A栋</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 汉沙杨公司卡片 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <h3>深圳市汉沙杨景观规划设计有限公司</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><i class="fas fa-map-pin"></i> <strong>地址：</strong>深圳市福田区深南大道6001号太平金融大厦15楼</p>
+                        <p><i class="fas fa-phone"></i> <strong>电话：</strong>0755-83215678</p>
+                        <p><i class="fas fa-clock"></i> <strong>营业时间：</strong>周一至周五 8:30-17:30</p>
+                        
+                        <div class="transport-options">
+                            <div class="transport-btn" :class="{'active': activeTransport[1] === 'metro'}" @click="setTransport(1, 'metro')">
+                                <i class="fas fa-train-subway"></i> 地铁
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[1] === 'bus'}" @click="setTransport(1, 'bus')">
+                                <i class="fas fa-bus"></i> 公交
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[1] === 'car'}" @click="setTransport(1, 'car')">
+                                <i class="fas fa-car"></i> 驾车
+                            </div>
+                        </div>
+                        
+                        <div class="route-details">
+                            <p v-if="activeTransport[1] === 'metro'">
+                                <i class="fas fa-subway"></i> <strong>地铁方案：</strong> 
+                                从西丽站乘坐<span class="highlight">5号线(环中线)</span>往前海湾方向，在<span class="highlight">宝安中心站</span>换乘<span class="highlight">1号线(罗宝线)</span>往罗湖方向，在<span class="highlight">购物公园站</span>下车，步行8分钟到达。
+                                <span class="time-badge">约45分钟</span>
+                            </p>
+                            <p v-if="activeTransport[1] === 'bus'">
+                                <i class="fas fa-bus"></i> <strong>公交方案：</strong> 
+                                从西丽地铁站公交站乘坐<span class="highlight">M313路</span>公交车，经过12站后在<span class="highlight">投资大厦站</span>下车，步行7分钟到达。
+                                <span class="time-badge">约55分钟</span>
+                            </p>
+                            <p v-if="activeTransport[1] === 'car'">
+                                <i class="fas fa-car"></i> <strong>驾车方案：</strong> 
+                                沿<span class="highlight">北环大道</span>向东行驶，转入<span class="highlight">新洲路</span>，再转入<span class="highlight">深南大道</span>，全程约18公里。
+                                <span class="time-badge">约40分钟</span>
+                                <span class="distance-badge">18公里</span>
+                            </p>
+                        </div>
+                        
+                        <div class="map-container">
+                            <div class="map-placeholder">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <p>汉沙杨公司位置地图</p>
+                                <p>深圳市福田区深南大道6001号</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 大地景观公司卡片 -->
+                <div class="company-card">
+                    <div class="card-header">
+                        <h3>深圳市大地景观设计有限公司</h3>
+                    </div>
+                    <div class="card-body">
+                        <p><i class="fas fa-map-pin"></i> <strong>地址：</strong>深圳市罗湖区人民南路2008号嘉里中心广场16层</p>
+                        <p><i class="fas fa-phone"></i> <strong>电话：</strong>0755-82346789</p>
+                        <p><i class="fas fa-clock"></i> <strong>营业时间：</strong>周一至周五 9:00-18:30</p>
+                        
+                        <div class="transport-options">
+                            <div class="transport-btn" :class="{'active': activeTransport[2] === 'metro'}" @click="setTransport(2, 'metro')">
+                                <i class="fas fa-train-subway"></i> 地铁
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[2] === 'bus'}" @click="setTransport(2, 'bus')">
+                                <i class="fas fa-bus"></i> 公交
+                            </div>
+                            <div class="transport-btn" :class="{'active': activeTransport[2] === 'car'}" @click="setTransport(2, 'car')">
+                                <i class="fas fa-car"></i> 驾车
+                            </div>
+                        </div>
+                        
+                        <div class="route-details">
+                            <p v-if="activeTransport[2] === 'metro'">
+                                <i class="fas fa-subway"></i> <strong>地铁方案：</strong> 
+                                从西丽站乘坐<span class="highlight">5号线(环中线)</span>往黄贝岭方向，在<span class="highlight">布吉站</span>换乘<span class="highlight">3号线(龙岗线)</span>往益田方向，在<span class="highlight">老街站</span>下车，步行12分钟到达。
+                                <span class="time-badge">约50分钟</span>
+                            </p>
+                            <p v-if="activeTransport[2] === 'bus'">
+                                <i class="fas fa-bus"></i> <strong>公交方案：</strong> 
+                                从西丽地铁站公交站乘坐<span class="highlight">E19路</span>快线公交车，经过15站后在<span class="highlight">金光华广场站</span>下车，步行8分钟到达。
+                                <span class="time-badge">约65分钟</span>
+                            </p>
+                            <p v-if="activeTransport[2] === 'car'">
+                                <i class="fas fa-car"></i> <strong>驾车方案：</strong> 
+                                沿<span class="highlight">南坪快速</span>向东行驶，转入<span class="highlight">文锦北路</span>，再转入<span class="highlight">人民南路</span>，全程约22公里。
+                                <span class="time-badge">约50分钟</span>
+                                <span class="distance-badge">22公里</span>
+                            </p>
+                        </div>
+                        
+                        <div class="map-container">
+                            <div class="map-placeholder">
+                                <i class="fas fa-map-marked-alt"></i>
+                                <p>大地景观公司位置地图</p>
+                                <p>深圳市罗湖区人民南路2008号</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer class="footer">
+            <p>© 2023 深圳设计公司路线规划 | 数据仅供参考，实际路线请以实时导航为准</p>
+        </footer>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                activeTransport: ['metro', 'metro', 'metro'] // 默认选择地铁方案
+            },
+            methods: {
+                setTransport(index, type) {
+                    this.$set(this.activeTransport, index, type);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
