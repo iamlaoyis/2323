@@ -235,6 +235,24 @@
             margin-top: 20px;
         }
         
+        .api-info {
+            background: #e8f5e9;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+        
+        .api-info h3 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+        }
+        
+        .api-info p {
+            margin-bottom: 8px;
+            line-height: 1.5;
+        }
+        
         footer {
             text-align: center;
             padding: 20px;
@@ -284,6 +302,13 @@
                     <button @click="fetchVehicleInfo" :disabled="loading">
                         <i class="fas fa-search"></i> 查询信息
                     </button>
+                </div>
+                
+                <div class="api-info">
+                    <h3><i class="fas fa-info-circle"></i> API使用说明</h3>
+                    <p>• 使用阿里云市场车架号查询API (API编号: cmapi00065864)</p>
+                    <p>• 当前AppCode: {{ maskedAppCode }}</p>
+                    <p>• 请求地址: https://tsvin.market.alicloudapi.com/vin/index</p>
                 </div>
             </div>
             
@@ -408,7 +433,14 @@
                 vin: 'WBAUD3107BP518510',
                 loading: false,
                 results: null,
-                error: null
+                error: null,
+                appCode: '749a9e5bcb0b483aa265fb8d89a9e481'
+            },
+            computed: {
+                maskedAppCode() {
+                    // 显示部分AppCode，保护敏感信息
+                    return this.appCode.substring(0, 8) + '****' + this.appCode.substring(12);
+                }
             },
             methods: {
                 async fetchVehicleInfo() {
@@ -422,41 +454,52 @@
                     this.error = null;
                     
                     try {
-                        // 此处应为实际API调用
-                        // 由于跨域和安全性问题，实际项目中API调用应在后端进行
-                        // 这里仅模拟API响应
+                        // 实际API调用
+                        const response = await axios.get('https://tsvin.market.alicloudapi.com/vin/index', {
+                            params: {
+                                vin: this.vin
+                            },
+                            headers: {
+                                'Authorization': `APPCODE ${this.appCode}`
+                            }
+                        });
                         
-                        console.log(`正在查询车架号: ${this.vin}`);
-                        
-                        // 模拟API响应时间
-                        await new Promise(resolve => setTimeout(resolve, 1500));
-                        
-                        // 模拟API响应数据
-                        this.results = {
-                            vin: this.vin,
-                            manufacturer: "宝马(宝马)",
-                            brand: "宝马",
-                            model: "3系",
-                            modelYear: "2021",
-                            engineModel: "B48B20",
-                            displacement: "2.0L",
-                            transmission: "自动",
-                            fuelType: "汽油",
-                            modelCode: "G20",
-                            series: "3系列轿车",
-                            bodyType: "轿车",
-                            plant: "德国丁格芬工厂",
-                            sequence: "518510",
-                            checkDigit: "B",
-                            vinVersion: "欧洲版"
-                        };
+                        // 检查API返回状态
+                        if (response.data && response.data.data) {
+                            this.results = response.data.data;
+                        } else {
+                            this.error = '未获取到有效数据，请检查车架号是否正确';
+                        }
                     } catch (err) {
-                        this.error = '查询失败，请检查网络连接或稍后重试';
                         console.error('API请求失败:', err);
+                        
+                        // 处理不同的错误情况
+                        if (err.response) {
+                            // API返回了错误响应
+                            if (err.response.status === 400) {
+                                this.error = '请求参数错误，请检查车架号格式';
+                            } else if (err.response.status === 401) {
+                                this.error = 'API认证失败，请检查AppCode';
+                            } else if (err.response.status === 404) {
+                                this.error = '未找到该车架号对应的车辆信息';
+                            } else {
+                                this.error = `API请求错误: ${err.response.status} ${err.response.statusText}`;
+                            }
+                        } else if (err.request) {
+                            // 请求已发送但未收到响应
+                            this.error = '网络请求失败，请检查网络连接';
+                        } else {
+                            // 其他错误
+                            this.error = '发生未知错误: ' + err.message;
+                        }
                     } finally {
                         this.loading = false;
                     }
                 }
+            },
+            mounted() {
+                // 页面加载时自动查询示例车架号
+                this.fetchVehicleInfo();
             }
         });
     </script>
