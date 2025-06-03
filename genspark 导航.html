@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>深圳西丽地铁站至规划设计公司路线导航</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@3.2.37/dist/vue.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            padding-bottom: 50px;
+        }
+        .card {
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        }
+        .company-card {
+            border-left: 5px solid;
+        }
+        .company-1 {
+            border-color: #4299e1;
+        }
+        .company-2 {
+            border-color: #48bb78;
+        }
+        .company-3 {
+            border-color: #ed8936;
+        }
+        .route-step {
+            position: relative;
+            padding-left: 2.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .route-step:before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 0;
+            height: 100%;
+            width: 2px;
+            background-color: #e2e8f0;
+        }
+        .route-step:last-child:before {
+            height: 50%;
+        }
+        .route-step .step-marker {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background-color: #4299e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            z-index: 2;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .map-container {
+            height: 400px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+        }
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://maps.googleapis.com/maps/api/staticmap?center=22.54,113.97&zoom=11&size=1200x400&maptype=roadmap&markers=color:red|22.565576,113.943198|22.5303413,114.0246212|22.5094222,113.92617369|22.544672,114.094662&key=AIzaSyC1MId7bFpkLXNAaYhBSTb8jLyiSqzbDtM') center/cover;
+            opacity: 0.3;
+        }
+        .timeline {
+            position: relative;
+            margin: 0 auto;
+        }
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 6px;
+            background-color: #e2e8f0;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -3px;
+        }
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+        }
+        .timeline-content {
+            padding: 15px;
+            background-color: white;
+            position: relative;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: -10px;
+            background-color: white;
+            border: 4px solid #4299e1;
+            top: 15px;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        .left {
+            left: 0;
+        }
+        .right {
+            left: 50%;
+        }
+        .right::after {
+            left: -10px;
+        }
+        .info-box {
+            border-left: 4px solid;
+            padding-left: 1rem;
+            margin-bottom: 1rem;
+        }
+        .info-time {
+            border-color: #4299e1;
+        }
+        .info-distance {
+            border-color: #48bb78;
+        }
+        .info-via {
+            border-color: #ed8936;
+        }
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="min-h-screen">
+        <!-- Banner Section -->
+        <div class="banner relative mb-8">
+            <div class="z-10 text-white text-center">
+                <h1 class="text-4xl font-bold mb-2">深圳西丽地铁站路线规划</h1>
+                <p class="text-xl">前往三家规划设计公司的最优路线</p>
+            </div>
+        </div>
+        
+        <div class="container mx-auto px-4">
+            <!-- 起点信息 -->
+            <div class="card bg-white p-6 mb-8">
+                <div class="flex items-center mb-4">
+                    <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                        <i class="fas fa-subway text-white"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold">起点: 深圳市西丽地铁站</h2>
+                        <p class="text-gray-600">位置: 深圳市南山区宝深路</p>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <p class="text-sm text-gray-700">
+                        <i class="fas fa-map-marker-alt text-blue-500 mr-2"></i>
+                        坐标: 22.565576, 113.943198
+                    </p>
+                </div>
+            </div>
+            
+            <!-- 路线概览图表 -->
+            <div class="card bg-white p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-4">路线概览</h2>
+                <div class="chart-container">
+                    <canvas id="routeComparisonChart"></canvas>
+                </div>
+                <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="info-box info-time">
+                        <h3 class="font-semibold">行车时间</h3>
+                        <p>朗程师: <span class="font-bold">16分钟</span></p>
+                        <p>汉沙杨: <span class="font-bold">14分钟</span></p>
+                        <p>大地景观: <span class="font-bold">27分钟</span></p>
+                    </div>
+                    <div class="info-box info-distance">
+                        <h3 class="font-semibold">行车距离</h3>
+                        <p>朗程师: <span class="font-bold">13.7公里</span></p>
+                        <p>汉沙杨: <span class="font-bold">8.4公里</span></p>
+                        <p>大地景观: <span class="font-bold">21.1公里</span></p>
+                    </div>
+                    <div class="info-box info-via">
+                        <h3 class="font-semibold">主要道路</h3>
+                        <p>朗程师: <span class="text-sm">京港澳高速/广深高速/G4</span></p>
+                        <p>汉沙杨: <span class="text-sm">南海大道</span></p>
+                        <p>大地景观: <span class="text-sm">京港澳高速/深南大道</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 导航标签栏 -->
+            <div class="bg-white rounded-t-lg overflow-hidden border-b">
+                <div class="flex">
+                    <button @click="activeTab = 1" :class="{'bg-blue-500 text-white': activeTab === 1, 'bg-gray-100': activeTab !== 1}" class="flex-1 py-4 px-6 text-center font-medium transition duration-300">
+                        <i class="fas fa-building mr-2"></i>朗程师地域规划
+                    </button>
+                    <button @click="activeTab = 2" :class="{'bg-green-500 text-white': activeTab === 2, 'bg-gray-100': activeTab !== 2}" class="flex-1 py-4 px-6 text-center font-medium transition duration-300">
+                        <i class="fas fa-tree mr-2"></i>汉沙杨景观规划
+                    </button>
+                    <button @click="activeTab = 3" :class="{'bg-orange-500 text-white': activeTab === 3, 'bg-gray-100': activeTab !== 3}" class="flex-1 py-4 px-6 text-center font-medium transition duration-300">
+                        <i class="fas fa-mountain mr-2"></i>大地景观设计
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 公司路线详情 - 朗程师 -->
+            <div :class="{'active': activeTab === 1}" class="tab-content">
+                <div class="card bg-white p-6 mb-8 company-card company-1">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-building text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">深圳市朗程师地域规划设计有限公司</h2>
+                            <p class="text-gray-600">福田区泰然八路海松大厦B座16层B1606</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车时间</p>
+                                <p class="text-xl font-bold">16分钟</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-road text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车距离</p>
+                                <p class="text-xl font-bold">13.7公里</p>
+                            </div>
+                        </div>
+                        <div class="bg-blue-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-route text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">推荐路线</p>
+                                <p class="text-md font-bold">京港澳高速/广深高速/G4</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container mb-8 bg-gray-200">
+                        <div class="map-overlay">
+                            <i class="fas fa-map-marked-alt text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">路线地图</h3>
+                            <p class="max-w-md text-gray-300">从西丽地铁站到朗程师地域规划设计有限公司的导航路线</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-4">详细路线指引</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="route-step">
+                            <div class="step-marker">1</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">从西丽地铁站出发</p>
+                                <p class="text-gray-600 text-sm">沿乾丰三路向东行驶</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">2</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">进入京港澳高速公路/广深高速公路/G4</p>
+                                <p class="text-gray-600 text-sm">行驶约8.3公里</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">3</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">从高速公路出口下，前往福田区</p>
+                                <p class="text-gray-600 text-sm">按指示牌前往市区</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">4</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">沿泰然六路和泰然十一路行驶</p>
+                                <p class="text-gray-600 text-sm">直到泰然八路</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">5</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">到达目的地</p>
+                                <p class="text-gray-600 text-sm">海松大厦B座16层B1606</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 公司路线详情 - 汉沙杨 -->
+            <div :class="{'active': activeTab === 2}" class="tab-content">
+                <div class="card bg-white p-6 mb-8 company-card company-2">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-tree text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">深圳市汉沙杨景观规划设计有限公司</h2>
+                            <p class="text-gray-600">南山区南海大道2168号</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-green-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车时间</p>
+                                <p class="text-xl font-bold">14分钟</p>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-road text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车距离</p>
+                                <p class="text-xl font-bold">8.4公里</p>
+                            </div>
+                        </div>
+                        <div class="bg-green-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-route text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">推荐路线</p>
+                                <p class="text-md font-bold">南海大道</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container mb-8 bg-gray-200">
+                        <div class="map-overlay">
+                            <i class="fas fa-map-marked-alt text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">路线地图</h3>
+                            <p class="max-w-md text-gray-300">从西丽地铁站到汉沙杨景观规划设计有限公司的导航路线</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-4">详细路线指引</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="route-step">
+                            <div class="step-marker">1</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">从西丽地铁站出发</p>
+                                <p class="text-gray-600 text-sm">沿乾丰三路向东行驶</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">2</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">沿同乐路行驶</p>
+                                <p class="text-gray-600 text-sm">继续向前直行约300米</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">3</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">进入南海大道</p>
+                                <p class="text-gray-600 text-sm">沿南海大道行驶约6.4公里</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">4</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">沿南海大道继续向前</p>
+                                <p class="text-gray-600 text-sm">目的地在右侧</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">5</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">到达目的地</p>
+                                <p class="text-gray-600 text-sm">南海大道2168号</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 公司路线详情 - 大地景观 -->
+            <div :class="{'active': activeTab === 3}" class="tab-content">
+                <div class="card bg-white p-6 mb-8 company-card company-3">
+                    <div class="flex items-center mb-6">
+                        <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-mountain text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">深圳市大地景观设计有限公司</h2>
+                            <p class="text-gray-600">福田区振华路设计大厦1423室</p>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <div class="bg-orange-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-clock text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车时间</p>
+                                <p class="text-xl font-bold">27分钟</p>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-road text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">行车距离</p>
+                                <p class="text-xl font-bold">21.1公里</p>
+                            </div>
+                        </div>
+                        <div class="bg-orange-50 p-4 rounded-lg flex items-center">
+                            <div class="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                <i class="fas fa-route text-white"></i>
+                            </div>
+                            <div>
+                                <p class="text-sm text-gray-500">推荐路线</p>
+                                <p class="text-md font-bold">京港澳高速/深南大道</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container mb-8 bg-gray-200">
+                        <div class="map-overlay">
+                            <i class="fas fa-map-marked-alt text-4xl mb-4"></i>
+                            <h3 class="text-xl font-bold mb-2">路线地图</h3>
+                            <p class="max-w-md text-gray-300">从西丽地铁站到大地景观设计有限公司的导航路线</p>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-xl font-bold mb-4">详细路线指引</h3>
+                    <div class="bg-gray-50 p-4 rounded-lg">
+                        <div class="route-step">
+                            <div class="step-marker">1</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">从西丽地铁站出发</p>
+                                <p class="text-gray-600 text-sm">沿乾丰三路向东行驶</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">2</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">进入京港澳高速公路/广深高速公路/G4</p>
+                                <p class="text-gray-600 text-sm">行驶约8.3公里</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">3</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">从高速公路转到深南大道</p>
+                                <p class="text-gray-600 text-sm">沿深南大道行驶约5.7公里</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">4</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">继续沿深南皇岗立交桥到深南中路</p>
+                                <p class="text-gray-600 text-sm">然后转到福启路</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">5</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">沿华富路行驶后右转进入振华路</p>
+                                <p class="text-gray-600 text-sm">沿振华路行驶约1.4公里</p>
+                            </div>
+                        </div>
+                        <div class="route-step">
+                            <div class="step-marker">6</div>
+                            <div class="ml-2">
+                                <p class="font-semibold">到达目的地</p>
+                                <p class="text-gray-600 text-sm">振华路设计大厦1423室</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 路线比较 -->
+            <div class="card bg-white p-6 mb-8">
+                <h2 class="text-2xl font-bold mb-6">三条路线比较</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white">
+                        <thead>
+                            <tr>
+                                <th class="py-3 px-4 bg-gray-100 text-left">公司名称</th>
+                                <th class="py-3 px-4 bg-gray-100 text-left">地址</th>
+                                <th class="py-3 px-4 bg-gray-100 text-left">行车时间</th>
+                                <th class="py-3 px-4 bg-gray-100 text-left">行车距离</th>
+                                <th class="py-3 px-4 bg-gray-100 text-left">主要道路</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="border-b">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-building text-white"></i>
+                                        </div>
+                                        <span>朗程师地域规划设计有限公司</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">福田区泰然八路海松大厦B座16层B1606</td>
+                                <td class="py-4 px-4"><span class="font-bold">16分钟</span></td>
+                                <td class="py-4 px-4">13.7公里</td>
+                                <td class="py-4 px-4">京港澳高速/广深高速/G4</td>
+                            </tr>
+                            <tr class="border-b">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-tree text-white"></i>
+                                        </div>
+                                        <span>汉沙杨景观规划设计有限公司</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">南山区南海大道2168号</td>
+                                <td class="py-4 px-4"><span class="font-bold text-green-600">14分钟</span> (最快)</td>
+                                <td class="py-4 px-4"><span class="font-bold text-green-600">8.4公里</span> (最近)</td>
+                                <td class="py-4 px-4">南海大道</td>
+                            </tr>
+                            <tr>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center mr-3">
+                                            <i class="fas fa-mountain text-white"></i>
+                                        </div>
+                                        <span>大地景观设计有限公司</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">福田区振华路设计大厦1423室</td>
+                                <td class="py-4 px-4"><span class="font-bold text-orange-600">27分钟</span> (最慢)</td>
+                                <td class="py-4 px-4"><span class="font-bold text-orange-600">21.1公里</span> (最远)</td>
+                                <td class="py-4 px-4">京港澳高速/深南大道</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- 结论和建议 -->
+            <div class="card bg-white p-6">
+                <h2 class="text-2xl font-bold mb-4">结论与建议</h2>
+                <div class="bg-yellow-50 p-4 rounded-lg mb-4 border-l-4 border-yellow-500">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-yellow-500 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-lg">最优路线排名</h3>
+                            <ol class="list-decimal list-inside mt-2 ml-4">
+                                <li class="mb-2">
+                                    <span class="font-bold text-green-600">深圳市汉沙杨景观规划设计有限公司</span> - 距离最短(8.4公里)，时间最短(14分钟)
+                                </li>
+                                <li class="mb-2">
+                                    <span class="font-bold text-blue-600">深圳市朗程师地域规划设计有限公司</span> - 距离适中(13.7公里)，时间适中(16分钟)
+                                </li>
+                                <li>
+                                    <span class="font-bold text-orange-600">深圳市大地景观设计有限公司</span> - 距离最远(21.1公里)，时间最长(27分钟)
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-info-circle text-blue-500 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="font-bold text-lg">出行建议</h3>
+                            <ul class="list-disc list-inside mt-2 ml-4">
+                                <li class="mb-2">如果按先后顺序拜访三家公司，建议按照：汉沙杨→朗程师→大地景观的顺序</li>
+                                <li class="mb-2">前往汉沙杨公司路线最为便捷，无需走高速，全程走南海大道即可</li>
+                                <li class="mb-2">前往朗程师公司和大地景观公司均需走高速公路，注意可能会有通行费</li>
+                                <li>出行高峰期可能会导致实际行程时间增加，建议提前规划时间</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer class="mt-16 bg-gray-800 text-white py-8">
+            <div class="container mx-auto px-4 text-center">
+                <p class="mb-2">西丽地铁站至规划设计公司路线导航</p>
+                <p class="text-gray-400 text-sm">© 2025 路线规划服务</p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        const { createApp } = Vue
+        
+        createApp({
+            data() {
+                return {
+                    activeTab: 1
+                }
+            },
+            mounted() {
+                this.renderCharts();
+            },
+            methods: {
+                renderCharts() {
+                    // 路线比较图表
+                    const ctx = document.getElementById('routeComparisonChart').getContext('2d');
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['朗程师地域规划', '汉沙杨景观规划', '大地景观设计'],
+                            datasets: [
+                                {
+                                    label: '行车距离(公里)',
+                                    data: [13.7, 8.4, 21.1],
+                                    backgroundColor: 'rgba(66, 153, 225, 0.6)',
+                                    borderColor: 'rgba(66, 153, 225, 1)',
+                                    borderWidth: 1
+                                },
+                                {
+                                    label: '行车时间(分钟)',
+                                    data: [16, 14, 27],
+                                    backgroundColor: 'rgba(72, 187, 120, 0.6)',
+                                    borderColor: 'rgba(72, 187, 120, 1)',
+                                    borderWidth: 1
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            },
+                            plugins: {
+                                legend: {
+                                    position: 'top',
+                                },
+                                title: {
+                                    display: true,
+                                    text: '三家公司路线时间与距离对比'
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        }).mount('#app')
+    </script>
+</body>
+</html>
