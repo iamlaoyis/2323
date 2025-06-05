@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>吴慧珠 - 行政岗位简历</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .resume-container {
+            max-width: 1000px;
+            margin: 30px auto;
+            background: white;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e5799, #207cca);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .name {
+            font-size: 2.8rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .title {
+            font-size: 1.4rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .main-content {
+            display: flex;
+            padding: 0;
+        }
+        
+        .sidebar {
+            flex: 0 0 35%;
+            background: #f8f9fa;
+            padding: 30px;
+            border-right: 1px solid #eaeaea;
+        }
+        
+        .main {
+            flex: 0 0 65%;
+            padding: 30px;
+        }
+        
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.4rem;
+            color: #1e5799;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #eaeaea;
+            position: relative;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 60px;
+            height: 2px;
+            background: #207cca;
+        }
+        
+        .skill-item {
+            margin-bottom: 15px;
+        }
+        
+        .skill-name {
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .skill-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-level {
+            height: 100%;
+            background: #207cca;
+            border-radius: 4px;
+        }
+        
+        .experience-item {
+            margin-bottom: 25px;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #207cca;
+        }
+        
+        .experience-item::after {
+            content: '';
+            position: absolute;
+            left: 4px;
+            top: 20px;
+            bottom: -15px;
+            width: 2px;
+            background: #e0e0e0;
+        }
+        
+        .experience-title {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: #1e5799;
+            margin-bottom: 5px;
+        }
+        
+        .experience-company {
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #555;
+        }
+        
+        .experience-period {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 10px;
+        }
+        
+        .experience-desc {
+            margin-bottom: 8px;
+            padding-left: 15px;
+            position: relative;
+        }
+        
+        .experience-desc::before {
+            content: '•';
+            position: absolute;
+            left: 0;
+            color: #207cca;
+        }
+        
+        .self-evaluation {
+            background: #f0f7ff;
+            padding: 20px;
+            border-radius: 6px;
+            font-style: italic;
+            color: #444;
+        }
+        
+        .education-item {
+            margin-bottom: 20px;
+            padding-left: 15px;
+            border-left: 2px solid #207cca;
+        }
+        
+        .education-title {
+            font-weight: 600;
+            color: #1e5799;
+        }
+        
+        .footer {
+            background: #2c3e50;
+            color: #ecf0f1;
+            text-align: center;
+            padding: 15px;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                flex-direction: column;
+            }
+            
+            .sidebar, .main {
+                flex: 1;
+                border-right: none;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+        }
+        
+        .icon {
+            color: #207cca;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="resume-container">
+        <!-- 头部信息 -->
+        <div class="header">
+            <h1 class="name">{{ resume.name }}</h1>
+            <div class="title">行政专员</div>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fas fa-phone"></i>
+                    <span>{{ resume.phone }}</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ resume.email }}</span>
+                </div>
+                <div class="contact-item">
+                    <i class="fas fa-user"></i>
+                    <span>{{ resume.gender }} | {{ resume.age }}岁</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="main-content">
+            <!-- 侧边栏 -->
+            <div class="sidebar">
+                <!-- 求职意向 -->
+                <div class="section">
+                    <h2 class="section-title">求职意向</h2>
+                    <div class="intention">
+                        <div class="experience-title">行政专员/行政助理</div>
+                    </div>
+                </div>
+                
+                <!-- 相关技能 -->
+                <div class="section">
+                    <h2 class="section-title">相关技能</h2>
+                    <div class="skill-item" v-for="(skill, index) in resume.skills" :key="index">
+                        <div class="skill-name">{{ skill.name }}</div>
+                        <div class="skill-bar">
+                            <div class="skill-level" :style="{width: skill.level + '%'}"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 教育经历 -->
+                <div class="section">
+                    <h2 class="section-title">教育经历</h2>
+                    <div class="education-item">
+                        <div class="education-title">工商管理类 - 市场营销 | 本科</div>
+                        <div class="experience-company">萍乡学院</div>
+                        <div class="experience-period">2020.09 - 2024.06</div>
+                    </div>
+                </div>
+                
+                <!-- 证书资质 -->
+                <div class="section">
+                    <h2 class="section-title">证书资质</h2>
+                    <div class="experience-desc">大学英语四级证书 (CET-4)</div>
+                    <div class="experience-desc">C1驾驶证</div>
+                </div>
+            </div>
+            
+            <!-- 主体内容 -->
+            <div class="main">
+                <!-- 工作经历 -->
+                <div class="section">
+                    <h2 class="section-title">工作经历</h2>
+                    
+                    <div class="experience-item">
+                        <div class="experience-title">行政专员</div>
+                        <div class="experience-company">深汕合作区鹅埠街道办事处</div>
+                        <div class="experience-period">2024.06 - 至今</div>
+                        <div class="experience-desc">行政制度体系建设，主导修订多项核心制度</div>
+                        <div class="experience-desc">全周期会议管理，统筹各类会议组织工作</div>
+                        <div class="experience-desc">综合后勤保障管理，建立资产电子台账</div>
+                        <div class="experience-desc">政企涉外事务处理，整理惠企政策</div>
+                    </div>
+                    
+                    <div class="experience-item">
+                        <div class="experience-title">行政文员</div>
+                        <div class="experience-company">深圳市衍庆科技有限公司</div>
+                        <div class="experience-period">2024.03 - 2024.06</div>
+                        <div class="experience-desc">日常办公支持，建立标准化文书模板库</div>
+                        <div class="experience-desc">资产与资源管理，完善采购审批流程</div>
+                        <div class="experience-desc">跨部门协作支持，处理政府检查对接</div>
+                        <div class="experience-desc">制度文化建设，修订行政制度</div>
+                    </div>
+                </div>
+                
+                <!-- 自我评价 -->
+                <div class="section">
+                    <h2 class="section-title">自我评价</h2>
+                    <div class="self-evaluation">
+                        {{ resume.selfEvaluation }}
+                    </div>
+                </div>
+                
+                <!-- 核心能力 -->
+                <div class="section">
+                    <h2 class="section-title">核心行政能力</h2>
+                    <div class="skills-container">
+                        <div class="skill-tag" v-for="(skill, index) in resume.coreSkills" :key="index">
+                            <i class="fas fa-check-circle icon"></i> {{ skill }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>更新于 {{ currentDate }} | 期待加入贵公司行政团队</p>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                currentDate: new Date().toLocaleDateString('zh-CN', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                }),
+                resume: {
+                    name: "吴慧珠",
+                    phone: "18029570794",
+                    email: "942739885@qq.com",
+                    gender: "女",
+                    age: 24,
+                    selfEvaluation: "有良好的沟通和协调能力，善于应变，能够快速适应新环境。熟悉使用办公软件，对文件管理、后勤保障、会务安排十分熟悉。工作认真负责，注重细节，具有良好的团队合作精神。",
+                    skills: [
+                        { name: "WPS Office", level: 95 },
+                        { name: "Microsoft Office", level: 90 },
+                        { name: "文件管理", level: 85 },
+                        { name: "会议组织", level: 90 },
+                        { name: "后勤保障", level: 85 },
+                        { name: "Photoshop", level: 75 },
+                        { name: "AI绘图软件", level: 70 }
+                    ],
+                    coreSkills: [
+                        "行政制度体系建设",
+                        "会议统筹管理",
+                        "后勤保障管理",
+                        "资产台账管理",
+                        "跨部门协作沟通",
+                        "政企事务处理",
+                        "办公流程优化",
+                        "团队文化建设"
+                    ]
+                }
+            }
+        });
+    </script>
+</body>
+</html>
